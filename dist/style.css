@@ -36,7 +36,7 @@
     width: 100%;
     height: 90%;
     background-color: #28282B;
-    border: 10px ridge rgba(106, 107, 78, 0.6);
+    /* border: 5px ridge rgba(106, 107, 78, 0.6); */
 }
 
 .tetromino {
@@ -47,7 +47,7 @@
 }
 
 .tetromino .full-ceil {
-    border: white  5px outset;
+    border: white  5px outset; /* they should be similar in .full-ceil and .empty-ceil */
 }
 
 .tetromino .empty-ceil {
