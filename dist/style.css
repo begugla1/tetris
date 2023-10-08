@@ -15,8 +15,8 @@
 
 .main {
     display: flex;
-    width: 350px;
-    height: 550px;
+    width: 250px;
+    height: 600px;
     justify-content: center;
     align-items: center;
     flex-direction: column;
@@ -43,4 +43,12 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+}
+
+.tetromino .full-ceil {
+    border: white  5px outset;
+}
+
+.tetromino .empty-ceil {
+    border: transparent 5px outset;
 }

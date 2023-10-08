@@ -56,6 +56,9 @@ const TETROMINO_TEMPLATES = [
         ],
     },
 ];
+function getCSSProperty(key, value, measure) {
+    return `${key}:${value}${measure ? measure : ""};`;
+}
 function getRandomTetrominoTemplate(tArray) {
     const index = Math.floor(Math.random() * tArray.length);
     return tArray[index];
@@ -64,17 +67,17 @@ function createRandomTetromino(tArray) {
     const tetrominoTemplate = getRandomTetrominoTemplate(tArray);
     const tetromino = document.createElement("div");
     tetromino.classList.add("tetromino");
-    tetromino.style.height = (CEIL_HEIGHT * tetrominoTemplate.scheme.length).toString();
-    tetromino.style.width = (CEIL_WIDTH * tetrominoTemplate.scheme[0].length).toString();
-    console.log((CEIL_HEIGHT * tetrominoTemplate.scheme.length).toString(), tetromino.style.width = (CEIL_WIDTH * tetrominoTemplate.scheme[0].length).toString());
+    tetromino.style.cssText += getCSSProperty("height", CEIL_HEIGHT * tetrominoTemplate.scheme.length, "px");
+    tetromino.style.cssText += getCSSProperty("width", CEIL_WIDTH * tetrominoTemplate.scheme[0].length, "px");
     for (let i = 0; i < tetrominoTemplate.scheme.length; i++) {
         for (let j = 0; j < tetrominoTemplate.scheme[i].length; j++) {
             const ceil = document.createElement("div");
-            ceil.style.width = CEIL_WIDTH.toString();
-            ceil.style.height = CEIL_HEIGHT.toString();
+            ceil.style.cssText += getCSSProperty("width", CEIL_WIDTH - 10, "px");
+            ceil.style.cssText += getCSSProperty("height", CEIL_HEIGHT - 10, "px");
             if (tetrominoTemplate.scheme[i][j] === 1) {
                 ceil.classList.add("full-ceil");
-                ceil.style.backgroundColor = tetrominoTemplate.color;
+                ceil.style.cssText += getCSSProperty("background-color", tetrominoTemplate.color);
+                ceil.style.cssText += getCSSProperty("border-color", tetrominoTemplate.color);
             }
             else
                 ceil.classList.add("empty-ceil");
