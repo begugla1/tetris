@@ -9,6 +9,8 @@ const WINDOW_HEIGHT = TETRIS_WINDOW_RECT.height;
 const CEIL_WIDTH = WINDOW_WIDTH / 10;
 const CEIL_HEIGHT = WINDOW_HEIGHT / 20;
 
+let lastID = 1;
+
 interface Tetromino {
   color: string;
   scheme: number[][];
@@ -80,6 +82,7 @@ function createRandomTetromino(tArray: Tetromino[]): HTMLElement {
   tetromino.classList.add("tetromino");
   tetromino.style.cssText += getCSSProperty("height", CEIL_HEIGHT * tetrominoTemplate.scheme.length, "px")
   tetromino.style.cssText += getCSSProperty("width", CEIL_WIDTH * tetrominoTemplate.scheme[0].length, "px")
+  tetromino.id = lastID.toString()
 
   for (let i = 0; i < tetrominoTemplate.scheme.length; i++) {
     for (let j = 0; j < tetrominoTemplate.scheme[i].length; j++) {
@@ -94,6 +97,7 @@ function createRandomTetromino(tArray: Tetromino[]): HTMLElement {
       tetromino.appendChild(ceil);
     }
   }
+  lastID += 1
   return tetromino;
 }
 
