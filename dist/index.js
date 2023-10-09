@@ -3,7 +3,7 @@
 const BOARD_WIDTH = 10;
 const BOARD_HEIGHT = 20;
 const BLOCK_WIDTH = 24; /* similar to height */
-const Board = (function () {
+const BOARD = (function () {
     const board = [];
     for (let i = 0; i < BOARD_HEIGHT; i++) {
         const row = [];
@@ -62,7 +62,7 @@ const tetrominoTemplates = [
         shape: [[7, 7, 7, 7]],
     },
 ];
-function getRandomTetromino() {
+function getTetromino() {
     const index = Math.floor(Math.random() * tetrominoTemplates.length);
     const tetrominoTemplate = tetrominoTemplates[index];
     const row = 0;
@@ -74,7 +74,7 @@ function getRandomTetromino() {
         col: col,
     };
 }
-let currentTetromino = getRandomTetromino();
+let currentTetromino = getTetromino();
 let ghostTetromino = currentTetromino;
 function drawTetromino() {
     const board = document.getElementById("tetris-window");
@@ -85,7 +85,7 @@ function drawTetromino() {
                 const row = currentTetromino.row;
                 const col = currentTetromino.col;
                 const block = document.createElement("div");
-                block.classList.add("block");
+                block.classList.add("block", "tb-classic"); /* you must define any style class for block!! (e.g) `tb-classic` */
                 block.id = `block-${row + r}-${col + c}`;
                 block.style.top = (row + r) * BLOCK_WIDTH + "px";
                 block.style.left = (col + c) * BLOCK_WIDTH + "px";
@@ -109,11 +109,74 @@ function eraseTetromino() {
         }
     }
 }
-function moveTetromino({ row, col }) {
-    eraseTetromino();
-    currentTetromino.row += row;
-    currentTetromino.col += col;
-    drawTetromino();
+function moveTetromino(rowIncrease, colIncrease) {
+    if (canTetrominoMove(rowIncrease, colIncrease)) {
+        eraseTetromino();
+        currentTetromino.row += rowIncrease;
+        currentTetromino.col += colIncrease;
+        drawTetromino();
+    }
+}
+function getRotatedShape(shape) {
+    const rotatedShape = [];
+    for (let i = 0; i < shape[0].length; i++) {
+        const rotatedRow = [];
+        for (let j = shape.length - 1; j >= 0; j--) {
+            rotatedRow.push(shape[j][i]);
+        }
+        rotatedShape.push(rotatedRow);
+    }
+    return rotatedShape;
+}
+function rotateTetromino() {
+    if (canTetrominoMove(0, 0, true)) {
+        eraseTetromino();
+        currentTetromino.shape = getRotatedShape(currentTetromino.shape);
+        drawTetromino();
+    }
+}
+function canTetrominoMove(rowOffset, colOffset, isRotated) {
+    let shape;
+    if (isRotated)
+        shape = getRotatedShape(currentTetromino.shape);
+    else
+        shape = currentTetromino.shape;
+    for (let r = 0; r < shape.length; r++) {
+        for (let c = 0; c < shape[0].length; c++) {
+            if (shape[r][c] !== 0) {
+                const row = currentTetromino.row + r + rowOffset;
+                const col = currentTetromino.col + c + colOffset;
+                if (row >= BOARD_HEIGHT ||
+                    row < 0 ||
+                    col >= BOARD_WIDTH ||
+                    col < 0 ||
+                    BOARD[row][col] !== 0)
+                    return false;
+            }
+        }
+    }
+    return true;
 }
 drawTetromino();
-setInterval(moveTetromino, 1000, { row: 1, col: 0 });
+setInterval(moveTetromino, 1000, 1, 0);
+document.addEventListener("keydown", tetrominoKeyHandler);
+function tetrominoKeyHandler(event) {
+    const key = event.key;
+    if (key === "a" || key === "ArrowLeft") {
+        moveTetromino(0, -1);
+    }
+    else if (key === "d" || key === "ArrowRight") {
+        moveTetromino(0, 1);
+    }
+    else if (key === "s" || key === "ArrowDown") {
+        moveTetromino(1, 0);
+    }
+    else if (key === "w" || key === "ArrowUp") {
+        rotateTetromino();
+    }
+    else if (key === " ")
+        console.log("Not implemented drop");
+    else {
+        moveTetromino(1, 0);
+    }
+}

@@ -24,8 +24,6 @@
 #tetris-window {
     height: 480px;
     width: 240px;
-    background: repeating-linear-gradient(#333333, #232023);
-    outline: 7px ridge grey;
     position: relative;
 }
 
@@ -33,6 +31,15 @@
     width: 24px;
     height: 24px;
     position: absolute;
+}
+
+/* you must define any style for window and block!!! */
+.tw-classic {
+    background: repeating-linear-gradient(#333333, #232023);
+    outline: 5px ridge grey;
+}
+
+.tb-classic {
     border: 1px outset black;
     box-sizing: border-box;
 }
