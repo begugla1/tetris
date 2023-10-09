@@ -1,52 +1,4 @@
 "use strict";
-const tetrominoTemplates = [
-    {
-        color: "red",
-        shape: [
-            [1, 1, 0],
-            [0, 1, 1],
-        ],
-    },
-    {
-        color: "purple",
-        shape: [
-            [0, 2, 0],
-            [2, 2, 2],
-        ],
-    },
-    {
-        color: "green",
-        shape: [
-            [0, 3, 3],
-            [3, 3, 0],
-        ],
-    },
-    {
-        color: "yellow",
-        shape: [
-            [4, 4],
-            [4, 4],
-        ],
-    },
-    {
-        color: "orange",
-        shape: [
-            [0, 0, 5],
-            [5, 5, 5],
-        ],
-    },
-    {
-        color: "blue",
-        shape: [
-            [6, 0, 0],
-            [6, 6, 6],
-        ],
-    },
-    {
-        color: "cyan",
-        shape: [[7, 7, 7, 7]],
-    },
-];
 class Tetris {
     constructor(boardWIDTH, boardHEIGHT, blockWidth, tetrominoTemplates) {
         this.BOARD_WIDTH = boardWIDTH;
@@ -79,6 +31,17 @@ class Tetris {
             row: row,
             col: col,
         };
+    }
+    getRotatedShape(shape) {
+        const rotatedShape = [];
+        for (let i = 0; i < shape[0].length; i++) {
+            const rotatedRow = [];
+            for (let j = shape.length - 1; j >= 0; j--) {
+                rotatedRow.push(shape[j][i]);
+            }
+            rotatedShape.push(rotatedRow);
+        }
+        return rotatedShape;
     }
     drawTetromino() {
         const board = document.getElementById("tetris-window");
@@ -126,17 +89,6 @@ class Tetris {
         this.currentTetromino = this.getTetromino();
         this.ghostTetromino = this.currentTetromino;
         this.drawTetromino();
-    }
-    getRotatedShape(shape) {
-        const rotatedShape = [];
-        for (let i = 0; i < shape[0].length; i++) {
-            const rotatedRow = [];
-            for (let j = shape.length - 1; j >= 0; j--) {
-                rotatedRow.push(shape[j][i]);
-            }
-            rotatedShape.push(rotatedRow);
-        }
-        return rotatedShape;
     }
     rotateTetromino() {
         if (this.canTetrominoMove(0, 0, true)) {
@@ -204,13 +156,61 @@ class Tetris {
     }
     run() {
         this.drawTetromino();
-        setInterval(this.tetrominoMoveHandler, 1000);
-        document.addEventListener("keydown", this.tetrominoMoveHandler);
+        setInterval(this.tetrominoMoveHandler.bind(this), 1000);
+        document.addEventListener("keydown", this.tetrominoMoveHandler.bind(this));
     }
 }
 // config
 const BOARD_WIDTH = 10;
 const BOARD_HEIGHT = 20;
 const BLOCK_WIDTH = 24; /* similar to height */
+const tetrominoTemplates = [
+    {
+        color: "red",
+        shape: [
+            [1, 1, 0],
+            [0, 1, 1],
+        ],
+    },
+    {
+        color: "purple",
+        shape: [
+            [0, 2, 0],
+            [2, 2, 2],
+        ],
+    },
+    {
+        color: "green",
+        shape: [
+            [0, 3, 3],
+            [3, 3, 0],
+        ],
+    },
+    {
+        color: "yellow",
+        shape: [
+            [4, 4],
+            [4, 4],
+        ],
+    },
+    {
+        color: "orange",
+        shape: [
+            [0, 0, 5],
+            [5, 5, 5],
+        ],
+    },
+    {
+        color: "blue",
+        shape: [
+            [6, 0, 0],
+            [6, 6, 6],
+        ],
+    },
+    {
+        color: "cyan",
+        shape: [[7, 7, 7, 7]],
+    },
+];
 const game = new Tetris(BOARD_WIDTH, BOARD_HEIGHT, BLOCK_WIDTH, tetrominoTemplates);
 game.run();
