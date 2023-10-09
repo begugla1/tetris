@@ -94,7 +94,6 @@ let ghostTetromino = currentTetromino;
 
 function drawTetromino(): void {
   const board = document.getElementById("tetris-window");
-  console.log(board);
   for (let r = 0; r < currentTetromino.shape.length; r++) {
     for (let c = 0; c < currentTetromino.shape[0].length; c++) {
       if (currentTetromino.shape[r][c] !== 0) {
@@ -128,13 +127,20 @@ function eraseTetromino(): void {
   }
 }
 
-function moveTetromino(rowIncrease: number, colIncrease: number): void {
-  if (canTetrominoMove(rowIncrease, colIncrease)) {
-    eraseTetromino();
-    currentTetromino.row += rowIncrease;
-    currentTetromino.col += colIncrease;
-    drawTetromino();
+function fixTetromino(): void {
+  for(let r = 0; r < currentTetromino.shape.length; r++) {
+    for(let c = 0; c < currentTetromino.shape[0].length; c++) {
+      if(currentTetromino.shape[r][c] !== 0) {
+        const row = currentTetromino.row + r;
+        const col = currentTetromino.col + c
+        if(BOARD[row][col] !== null)
+          BOARD[row][col] = currentTetromino.shape[r][c]
+      }
+    }
   }
+  currentTetromino = getTetromino();
+  ghostTetromino = currentTetromino;
+  drawTetromino()
 }
 
 function getRotatedShape(shape: number[][]): number[][] {
@@ -184,23 +190,42 @@ function canTetrominoMove(
   return true;
 }
 
+function moveTetromino(rowIncrease: number, colIncrease: number): void {
+  if (canTetrominoMove(rowIncrease, colIncrease)) {
+    eraseTetromino();
+    currentTetromino.row += rowIncrease;
+    currentTetromino.col += colIncrease;
+    drawTetromino();
+    if(rowIncrease === 1 && !canTetrominoMove(rowIncrease, colIncrease))
+      fixTetromino()
+  }
+}
+
 drawTetromino();
-setInterval(moveTetromino, 1000, 1, 0);
-document.addEventListener("keydown", tetrominoKeyHandler);
+setInterval(tetrominoMoveHandler, 1000);
+document.addEventListener("keydown", tetrominoMoveHandler);
 
-function tetrominoKeyHandler(event: KeyboardEvent): void {
-  const key = event.key;
+function tetrominoMoveHandler(event?: KeyboardEvent): void {
+  if (!event) {
+    moveTetromino(1, 0);
+  } else {
+    const key = event.key;
 
-  if (key === "a" || key === "ArrowLeft") {
-    moveTetromino(0, -1);
-  } else if (key === "d" || key === "ArrowRight") {
-    moveTetromino(0, 1);
-  } else if (key === "s" || key === "ArrowDown") {
-    moveTetromino(1, 0);
-  } else if (key === "w" || key === "ArrowUp") {
-    rotateTetromino();
-  } else if (key === " ") console.log("Not implemented drop");
-  else {
-    moveTetromino(1, 0);
+    if (key === "a" || key === "ArrowLeft") {
+      moveTetromino(0, -1);
+    } else if (key === "d" || key === "ArrowRight") {
+      moveTetromino(0, 1);
+    } else if (key === "s" || key === "ArrowDown") {
+      moveTetromino(1, 0);
+    } else if (key === "w" || key === "ArrowUp") {
+      rotateTetromino();
+    } else if (key === " ") console.log("Not implemented drop");
+    else {
+      if (canTetrominoMove(1, 0)) {
+        moveTetromino(1, 0);
+      } else {
+        console.log("Hello");
+      }
+    }
   }
 }
