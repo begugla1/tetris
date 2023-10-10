@@ -275,7 +275,7 @@ class Tetris {
     for (let r = 0; r < shape.length; r++) {
       for (let c = 0; c < shape[0].length; c++) {
         if (shape[r][c]) {
-          this.drawBlock(color, row + r, col + c, "ghost-block");
+          this.drawBlock("grey", row + r, col + c, "ghost-block");
         }
       }
     }
