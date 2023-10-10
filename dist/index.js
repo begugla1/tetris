@@ -1,4 +1,8 @@
 "use strict";
+//** Class for game `Tetris` using `div` conatiner with `id  game-board`
+/* to draw blocks and properly interact with user while playing, game is
+/* pretty simple, but pretty ^_^ (in my opinion)
+*/
 class Tetris {
     constructor(boardHeight, boardWidth, blockSize, tetrominoTemplates) {
         this.boardHeight = boardHeight;
@@ -9,6 +13,9 @@ class Tetris {
         this.mainClickHandler = this.mainEventListener.bind(this);
         document.addEventListener("click", this.mainClickHandler);
     }
+    /** returns matrix using `boardHeight` attr like quantity of rows
+     * and `boardWidth` attr like quantity of columns
+    */
     getEmptyBoard() {
         const board = [];
         for (let i = 0; i < this.boardHeight; i++) {
@@ -20,6 +27,7 @@ class Tetris {
         }
         return board;
     }
+    //** redraws current html `div` container with game */
     redrawBoard() {
         document.getElementById("game-board").innerHTML = "";
         for (let r = 0; r < this.boardHeight; r++) {
@@ -30,6 +38,7 @@ class Tetris {
             }
         }
     }
+    //** returns rotated shape of given shape, doing rotation to clockwise on 90 degrees */
     getRotatedShape(shape) {
         const rotatedShape = [];
         for (let i = 0; i < shape[0].length; i++) {
@@ -41,6 +50,7 @@ class Tetris {
         }
         return rotatedShape;
     }
+    //** returns random tetromino using `tetrominoTemplates` attr to get random tetromino template */
     getRandomTetromino() {
         const tetrominoTemplateIndex = Math.floor(Math.random() * this.tetrominoTemplates.length);
         const tetrominoTemplate = this.tetrominoTemplates[tetrominoTemplateIndex];
@@ -52,6 +62,7 @@ class Tetris {
                 (this.boardWidth - tetrominoTemplate.shape[0].length + 1)),
         };
     }
+    //** draws HTML block within game board with given params */
     drawBlock(color, row, col) {
         var _a;
         const block = document.createElement("div");
@@ -62,6 +73,7 @@ class Tetris {
         block.style.backgroundColor = color;
         (_a = document.getElementById("game-board")) === null || _a === void 0 ? void 0 : _a.appendChild(block);
     }
+    //** erases block with given id */
     eraseBlock(blockId) {
         var _a;
         const block = document.getElementById(blockId);
@@ -159,6 +171,11 @@ class Tetris {
             }
         }
     }
+    /** Checks if current tetromino can move with given increases, if it does,
+     * moves one to another coords with given increases and returns true, otherwise
+     * checks in which direction was moving, if it goes down,
+     * calls `fixTetromino` function to fix current tetromino, then returns false
+     */
     moveTetromino(rowIncrease, colIncrease) {
         if (!this.canTetrominoMove(rowIncrease, colIncrease)) {
             if (rowIncrease > 0) {
@@ -172,6 +189,9 @@ class Tetris {
         this.drawTetromino();
         return true;
     }
+    /**
+     * event listener for all game key events
+     */
     keyGameEventListener(ev) {
         const key = ev.key;
         if (key === "ArrowLeft" || key === "a") {
@@ -190,14 +210,19 @@ class Tetris {
             this.dropTetromino();
         }
     }
+    /** event listener which after mouse clicking envoke `run` function to start game */
     mainEventListener() {
         this.run();
     }
+    /** stops game and current interval function */
     stopGame() {
         clearInterval(this.GameIntervalId);
         document.removeEventListener("keydown", this.gameKeyHandler);
         console.log("You are lose!");
     }
+    /** main function. clear board, current interval functon if it exists, draw start tetromino,
+     * starts new one interval function and adds `keyGameEventListener` to interact with game
+     */
     run() {
         clearInterval(this.GameIntervalId);
         this.board = this.getEmptyBoard();
