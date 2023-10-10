@@ -1,7 +1,7 @@
 "use strict";
 /** Class for game `Tetris` using `div` conatiner with `id  game-board`
  * to draw blocks and properly interact with user while playing.
- * P.S game is pretty simple, but pretty ^_^ (in my opinion)
+ * P.S Doing this game i was inspired by one video from youtube  ^_^
  */
 class Tetris {
     constructor(boardHeight, boardWidth, blockSize, downtime, tetrominoTemplates) {
