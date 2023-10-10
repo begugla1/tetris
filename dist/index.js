@@ -207,7 +207,6 @@ class Tetris {
     /** Draw current ghost Tetronimo from the game board*/
     drawGhostTetromino() {
         const [row, col] = this.getGhostTetrominoCoords();
-        const color = this.CurrentTetromino.color;
         const shape = this.CurrentTetromino.shape;
         for (let r = 0; r < shape.length; r++) {
             for (let c = 0; c < shape[0].length; c++) {
