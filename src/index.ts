@@ -118,7 +118,7 @@ class Tetris {
   }
 
   private rotateTetromino(): void {
-    if (this.canTetrominoMove(0, 0, true)) {
+    if (this.canTetrominoRotate()) {
       this.eraseTetromino();
       this.CurrentTetromino.shape = this.getRotatedShape(
         this.CurrentTetromino.shape
@@ -173,6 +173,10 @@ class Tetris {
       }
     }
     return true;
+  }
+
+  private canTetrominoRotate(): boolean {
+    return this.canTetrominoMove(0, 0, true)
   }
 
   private moveTetromino(

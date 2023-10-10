@@ -82,7 +82,7 @@ class Tetris {
         }
     }
     rotateTetromino() {
-        if (this.canTetrominoMove(0, 0, true)) {
+        if (this.canTetrominoRotate()) {
             this.eraseTetromino();
             this.CurrentTetromino.shape = this.getRotatedShape(this.CurrentTetromino.shape);
             this.drawTetromino();
@@ -127,6 +127,9 @@ class Tetris {
             }
         }
         return true;
+    }
+    canTetrominoRotate() {
+        return this.canTetrominoMove(0, 0, true);
     }
     moveTetromino(rowIncrease, colIncrease) {
         if (!this.canTetrominoMove(rowIncrease, colIncrease)) {
