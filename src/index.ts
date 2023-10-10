@@ -30,8 +30,8 @@ class Tetris {
     this.tetrominoTemplates = tetrominoTemplates;
     this.CurrentTetromino = this.getRandomTetromino();
     this.board = this.getEmptyBoard();
+    
     this.drawTetromino();
-
     setInterval(this.moveTetromino.bind(this), 1000, 1, 0);
     document.addEventListener("keydown", this.keyEventIstener.bind(this));
   }
