@@ -14,9 +14,12 @@ class Tetris {
   boardHeight: number;
   boardWidth: number;
   blockSize: number;
-  board: Board;
   tetrominoTemplates: TetrominoTemplate[];
-  CurrentTetromino: Tetromino;
+  gameKeyHandler: (ev: KeyboardEvent) => void;
+  mainClickHandler: () => void;
+  board!: Board;
+  CurrentTetromino!: Tetromino;
+  GameIntervalId!: NodeJS.Timeout;
 
   constructor(
     boardHeight: number,
@@ -28,12 +31,9 @@ class Tetris {
     this.boardWidth = boardWidth;
     this.blockSize = blockSize;
     this.tetrominoTemplates = tetrominoTemplates;
-    this.CurrentTetromino = this.getRandomTetromino();
-    this.board = this.getEmptyBoard();
-    
-    this.drawTetromino();
-    setInterval(this.moveTetromino.bind(this), 1000, 1, 0);
-    document.addEventListener("keydown", this.keyEventIstener.bind(this));
+    this.gameKeyHandler = this.keyGameEventListener.bind(this)
+    this.mainClickHandler = this.mainEventListener.bind(this)
+    document.addEventListener("click", this.mainClickHandler)
   }
 
   private getEmptyBoard(): Board {
@@ -49,6 +49,7 @@ class Tetris {
   }
 
   private redrawBoard(): void {
+    document.getElementById("game-board")!.innerHTML = ""
     for(let r = 0; r < this.boardHeight; r++) {
       for(let c = 0; c < this.boardWidth; c++) {
         if(this.board[r][c]) {
@@ -139,6 +140,15 @@ class Tetris {
     return this.canTetrominoMove(0, 0, true)
   }
 
+  private losingTetrominoIsSet(): boolean {
+    for(let i = 0; i < this.boardWidth; i++) {
+      if(this.board[0][i] !== ""){
+        return true;
+      }
+    }
+    return false;
+  }
+
   private drawTetromino(): void {
     const tetromino = this.CurrentTetromino;
     for (let r = 0; r < tetromino.shape.length; r++) {
@@ -185,6 +195,10 @@ class Tetris {
         }
       }
     }
+    if(this.losingTetrominoIsSet()){
+      this.stopGame()
+      return
+    }
     this.CurrentTetromino = this.getRandomTetromino();
     this.drawTetromino()
   }
@@ -214,7 +228,7 @@ class Tetris {
     return true;
   }
 
-  private keyEventIstener(ev: KeyboardEvent): void {
+  private keyGameEventListener(ev: KeyboardEvent): void {
     const key = ev.key;
     if (key === "ArrowLeft" || key === "a") {
       this.moveTetromino(0, -1);
@@ -224,9 +238,31 @@ class Tetris {
       this.rotateTetromino();
     } else if (key === " ") {
       this.dropTetromino()
+    } else if (key === "Escape") {
+      this.stopGame()
     } else {
       this.moveTetromino(1, 0);
     }
+  }
+
+  private mainEventListener(): void {
+    this.runGame()
+  }
+
+  private stopGame() {
+    clearInterval(this.GameIntervalId)
+    document.removeEventListener("keydown", this.gameKeyHandler)
+    console.log("You are lose!")
+  }
+
+  private runGame() {
+    clearInterval(this.GameIntervalId)
+    this.board = this.getEmptyBoard()
+    this.redrawBoard()
+    this.CurrentTetromino = this.getRandomTetromino()
+    this.drawTetromino();
+    this.GameIntervalId = setInterval(this.moveTetromino.bind(this), 1000, 1, 0);
+    document.addEventListener("keydown", this.gameKeyHandler);
   }
 }
 
@@ -283,7 +319,7 @@ const BOARD_WIDTH = 10;
 const BOARD_HEIGHT = 20;
 const BLOCK_SIZE = 24;
 
-const game = new Tetris(
+new Tetris(
   BOARD_HEIGHT,
   BOARD_WIDTH,
   BLOCK_SIZE,
