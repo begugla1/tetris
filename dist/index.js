@@ -101,7 +101,6 @@ class Tetris {
         while (this.canGhostTetrominoMove(row, col)) {
             row++;
         }
-        console.log(row, col);
         return [row, col];
     }
     /** Draws HTML block within game board with given params */
