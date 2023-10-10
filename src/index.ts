@@ -21,7 +21,7 @@ class Tetris {
   downTime: number;
   tetrominoTemplates: TetrominoTemplate[];
   gameKeyHandler: (ev: KeyboardEvent) => void;
-  mainClickHandler: () => void;
+  mainClickHandler: (ev: KeyboardEvent) => void;
   board!: Board;
   CurrentTetromino!: Tetromino;
   GameIntervalId?: NodeJS.Timeout;
@@ -40,7 +40,8 @@ class Tetris {
     this.tetrominoTemplates = tetrominoTemplates;
     this.gameKeyHandler = this.keyGameEventListener.bind(this);
     this.mainClickHandler = this.mainEventListener.bind(this);
-    document.addEventListener("click", this.mainClickHandler);
+    document.addEventListener("keydown", this.mainClickHandler);
+    this.toggleBgMusic()
   }
 
   /** Returns matrix using `boardHeight` attr like quantity of rows and `boardWidth`
@@ -311,21 +312,36 @@ class Tetris {
   }
 
   /** Event listener which after mouse clicking envoke `run` function to start game */
-  private mainEventListener(): void {
-    this.run();
+  private mainEventListener(ev: KeyboardEvent): void {
+    const key = ev.key
+    if (key === "Enter") {
+      this.run();
+    } else if (key === "m") {
+      this.toggleBgMusic()
+    }
   }
 
   /** Stops game and current interval function */
-  private stopGame() {
+  private stopGame(): void {
     clearInterval(this.GameIntervalId);
     document.removeEventListener("keydown", this.gameKeyHandler);
     console.log("You are lose!");
+  }
+  
+  /** Toggle bg music */
+  public toggleBgMusic(): void {
+    const music = document.querySelector("audio")!
+    if(music.paused) {
+      music.play()
+    } else {
+      music.pause()
+    }
   }
 
   /** Main function. Clear board, current interval functon if it exists, draw start tetromino,
    * starts new one interval function and adds `keyGameEventListener` to interact with player
    */
-  public run() {
+  public run(): void {
     clearInterval(this.GameIntervalId);
     this.board = this.getEmptyBoard();
     this.redrawBoard();

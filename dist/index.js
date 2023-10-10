@@ -12,7 +12,8 @@ class Tetris {
         this.tetrominoTemplates = tetrominoTemplates;
         this.gameKeyHandler = this.keyGameEventListener.bind(this);
         this.mainClickHandler = this.mainEventListener.bind(this);
-        document.addEventListener("click", this.mainClickHandler);
+        document.addEventListener("keydown", this.mainClickHandler);
+        this.toggleBgMusic();
     }
     /** Returns matrix using `boardHeight` attr like quantity of rows and `boardWidth`
      * attr like quantity of columns
@@ -257,14 +258,30 @@ class Tetris {
         }
     }
     /** Event listener which after mouse clicking envoke `run` function to start game */
-    mainEventListener() {
-        this.run();
+    mainEventListener(ev) {
+        const key = ev.key;
+        if (key === "Enter") {
+            this.run();
+        }
+        else if (key === "m") {
+            this.toggleBgMusic();
+        }
     }
     /** Stops game and current interval function */
     stopGame() {
         clearInterval(this.GameIntervalId);
         document.removeEventListener("keydown", this.gameKeyHandler);
         console.log("You are lose!");
+    }
+    /** Toggle bg music */
+    toggleBgMusic() {
+        const music = document.querySelector("audio");
+        if (music.paused) {
+            music.play();
+        }
+        else {
+            music.pause();
+        }
     }
     /** Main function. Clear board, current interval functon if it exists, draw start tetromino,
      * starts new one interval function and adds `keyGameEventListener` to interact with player

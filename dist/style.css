@@ -31,7 +31,7 @@
     height: 24px;
     position: absolute;
     outline: 1px solid #000000;
-    box-shadow: inset 3px 3px 0 rgba(255, 255, 255, 0.5);
+    box-shadow: inset 2px 2px 0 rgba(255, 255, 255, 0.5);
     border-radius: 1px;
 }
 
@@ -39,5 +39,8 @@
     width: 24px;
     height: 24px;
     position: absolute;
-    outline: 1px solid grey;
+    outline: 1px solid #000000;
+    box-shadow: inset 2px 2px 0 rgba(255, 255, 255, 0.5);
+    border-radius: 1px;
+    filter: brightness(35%)
 }
