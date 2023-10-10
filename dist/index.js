@@ -8,7 +8,7 @@ class Tetris {
         this.CurrentTetromino = this.getRandomTetromino();
         this.board = this.getEmptyBoard();
         this.drawTetromino();
-        setInterval(this.moveTetromino.bind(this), 1000, 1, 0, true);
+        setInterval(this.moveTetromino.bind(this), 1000, 1, 0);
         document.addEventListener("keydown", this.keyEventIstener.bind(this));
     }
     getEmptyBoard() {
@@ -71,8 +71,9 @@ class Tetris {
         }
     }
     eraseTetromino() {
-        for (let r = 0; r < this.CurrentTetromino.shape.length; r++) {
-            for (let c = 0; c < this.CurrentTetromino.shape[0].length; c++) {
+        const tetromino = this.CurrentTetromino;
+        for (let r = 0; r < tetromino.shape.length; r++) {
+            for (let c = 0; c < tetromino.shape[0].length; c++) {
                 if (this.CurrentTetromino.shape[r][c]) {
                     const blockId = `block-${this.CurrentTetromino.row + r}-${this.CurrentTetromino.col + c}`;
                     this.eraseBlock(blockId);
@@ -86,6 +87,20 @@ class Tetris {
             this.CurrentTetromino.shape = this.getRotatedShape(this.CurrentTetromino.shape);
             this.drawTetromino();
         }
+    }
+    fixTetromino() {
+        const tetromino = this.CurrentTetromino;
+        for (let r = 0; r < tetromino.shape.length; r++) {
+            for (let c = 0; c < tetromino.shape[0].length; c++) {
+                if (tetromino.shape[r][c]) {
+                    const row = tetromino.row + r;
+                    const col = tetromino.col + c;
+                    this.board[row][col] = tetromino.color;
+                }
+            }
+        }
+        this.CurrentTetromino = this.getRandomTetromino();
+        this.drawTetromino();
     }
     canTetrominoMove(rowIncrease, colIncrease, isRotated = false) {
         let currentShape = this.CurrentTetromino.shape;
@@ -101,8 +116,10 @@ class Tetris {
                         row < 0 ||
                         col >= this.boardWidth ||
                         col < 0 ||
-                        (row >= 0 && row < this.boardHeight &&
-                            col >= 0 && col < this.boardWidth &&
+                        (row >= 0 &&
+                            row < this.boardHeight &&
+                            col >= 0 &&
+                            col < this.boardWidth &&
                             this.board[row][col] !== "")) {
                         return false;
                     }
@@ -111,10 +128,12 @@ class Tetris {
         }
         return true;
     }
-    moveTetromino(rowIncrease, colIncrease, checkColissions = true) {
-        if (checkColissions) {
-            if (!this.canTetrominoMove(rowIncrease, colIncrease))
-                return;
+    moveTetromino(rowIncrease, colIncrease) {
+        if (!this.canTetrominoMove(rowIncrease, colIncrease)) {
+            if (rowIncrease > 0) {
+                this.fixTetromino();
+            }
+            return;
         }
         this.eraseTetromino();
         this.CurrentTetromino.row += rowIncrease;
@@ -123,20 +142,17 @@ class Tetris {
     }
     keyEventIstener(ev) {
         const key = ev.key;
-        if (key === "ArrowLeft") {
+        if (key === "ArrowLeft" || key === "a") {
             this.moveTetromino(0, -1);
         }
-        else if (key === "ArrowRight") {
+        else if (key === "ArrowRight" || key === "d") {
             this.moveTetromino(0, 1);
         }
-        else if (key === "ArrowUp") {
+        else if (key === "ArrowUp" || key === "w") {
             this.rotateTetromino();
         }
         else {
-            if (this.canTetrominoMove(1, 0))
-                this.moveTetromino(1, 0, false);
-            else
-                console.log("should be fixed!2");
+            this.moveTetromino(1, 0);
         }
     }
 }
