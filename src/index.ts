@@ -10,11 +10,10 @@ interface Tetromino extends TetrominoTemplate {
 
 type Board = string[][];
 
-
-//** Class for game `Tetris` using `div` conatiner with `id  game-board`
-/* to draw blocks and properly interact with user while playing, game is
-/* pretty simple, but pretty ^_^ (in my opinion)
-*/
+/** Class for game `Tetris` using `div` conatiner with `id  game-board`
+ * to draw blocks and properly interact with user while playing.
+ * P.S game is pretty simple, but pretty ^_^ (in my opinion)
+ */
 class Tetris {
   boardHeight: number;
   boardWidth: number;
@@ -41,9 +40,9 @@ class Tetris {
     document.addEventListener("click", this.mainClickHandler);
   }
 
-  /** returns matrix using `boardHeight` attr like quantity of rows
-   * and `boardWidth` attr like quantity of columns
-  */
+  /** returns matrix using `boardHeight` attr like quantity of rows and `boardWidth` attr
+   *  like quantity of columns
+   */
   private getEmptyBoard(): Board {
     const board = [];
     for (let i = 0; i < this.boardHeight; i++) {
@@ -56,7 +55,7 @@ class Tetris {
     return board;
   }
 
-  //** redraws current html `div` container with game */
+  /** redraws html `div` container with game */
   private redrawBoard(): void {
     document.getElementById("game-board")!.innerHTML = "";
     for (let r = 0; r < this.boardHeight; r++) {
@@ -68,7 +67,7 @@ class Tetris {
     }
   }
 
-  //** returns rotated shape of given shape, doing rotation to clockwise on 90 degrees */
+  /** returns rotated shape of given shape, doing rotation to clockwise on 90 degrees */
   private getRotatedShape(shape: number[][]): number[][] {
     const rotatedShape = [];
     for (let i = 0; i < shape[0].length; i++) {
@@ -81,7 +80,8 @@ class Tetris {
     return rotatedShape;
   }
 
-  //** returns random tetromino using `tetrominoTemplates` attr to get random tetromino template */
+  /** returns random tetromino using `tetrominoTemplates` attr to get random
+   * tetromino template */
   private getRandomTetromino(): Tetromino {
     const tetrominoTemplateIndex = Math.floor(
       Math.random() * this.tetrominoTemplates.length
@@ -98,7 +98,7 @@ class Tetris {
     };
   }
 
-  //** draws HTML block within game board with given params */
+  /** draws HTML block within game board with given params */
   private drawBlock(color: string, row: number, col: number): void {
     const block = document.createElement("div");
     block.id = `block-${row}-${col}`;
@@ -110,7 +110,7 @@ class Tetris {
     document.getElementById("game-board")?.appendChild(block);
   }
 
-  //** erases block with given id */
+  /** erases block with given id */
   private eraseBlock(blockId: string): void {
     const block = document.getElementById(blockId);
     if (block) document.getElementById("game-board")?.removeChild(block);
@@ -292,7 +292,6 @@ class Tetris {
     document.addEventListener("keydown", this.gameKeyHandler);
   }
 }
-
 
 const tetrominoTemplates: TetrominoTemplate[] = [
   {
