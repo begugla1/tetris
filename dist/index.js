@@ -144,6 +144,7 @@ class Tetris {
                 }
             }
         }
+        //FIXME There should be clearing of rows
         if (this.losingTetrominoIsSet()) {
             this.stopGame();
             return;
@@ -182,25 +183,22 @@ class Tetris {
         else if (key === "ArrowUp" || key === "w") {
             this.rotateTetromino();
         }
+        else if (key === "ArrowDown" || key === "s") {
+            this.moveTetromino(1, 0);
+        }
         else if (key === " ") {
             this.dropTetromino();
         }
-        else if (key === "Escape") {
-            this.stopGame();
-        }
-        else {
-            this.moveTetromino(1, 0);
-        }
     }
     mainEventListener() {
-        this.runGame();
+        this.run();
     }
     stopGame() {
         clearInterval(this.GameIntervalId);
         document.removeEventListener("keydown", this.gameKeyHandler);
         console.log("You are lose!");
     }
-    runGame() {
+    run() {
         clearInterval(this.GameIntervalId);
         this.board = this.getEmptyBoard();
         this.redrawBoard();
@@ -261,4 +259,5 @@ const tetrominoTemplates = [
 const BOARD_WIDTH = 10;
 const BOARD_HEIGHT = 20;
 const BLOCK_SIZE = 24;
-new Tetris(BOARD_HEIGHT, BOARD_WIDTH, BLOCK_SIZE, tetrominoTemplates);
+const game = new Tetris(BOARD_HEIGHT, BOARD_WIDTH, BLOCK_SIZE, tetrominoTemplates);
+game.run();
