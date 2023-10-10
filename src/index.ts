@@ -48,6 +48,16 @@ class Tetris {
     return board;
   }
 
+  private redrawBoard(): void {
+    for(let r = 0; r < this.boardHeight; r++) {
+      for(let c = 0; c < this.boardWidth; c++) {
+        if(this.board[r][c]) {
+          this.drawBlock(this.board[r][c], r, c)
+        }
+      }
+    }
+  }
+
   private getRotatedShape(shape: number[][]): number[][] {
     const rotatedShape = [];
     for (let i = 0; i < shape[0].length; i++) {
@@ -90,6 +100,43 @@ class Tetris {
   private eraseBlock(blockId: string): void {
     const block = document.getElementById(blockId);
     if (block) document.getElementById("game-board")?.removeChild(block);
+  }
+
+  private canTetrominoMove(
+    rowIncrease: number,
+    colIncrease: number,
+    isRotated: boolean = false
+  ): boolean {
+    let currentShape = this.CurrentTetromino.shape;
+    if (isRotated) {
+      currentShape = this.getRotatedShape(this.CurrentTetromino.shape);
+    }
+    for (let r = 0; r < currentShape.length; r++) {
+      for (let c = 0; c < currentShape[0].length; c++) {
+        if (currentShape[r][c]) {
+          const row = this.CurrentTetromino.row + r + rowIncrease;
+          const col = this.CurrentTetromino.col + c + colIncrease;
+          if (
+            row >= this.boardHeight ||
+            row < 0 ||
+            col >= this.boardWidth ||
+            col < 0 ||
+            (row >= 0 &&
+              row < this.boardHeight &&
+              col >= 0 &&
+              col < this.boardWidth &&
+              this.board[row][col] !== "")
+          ) {
+            return false;
+          }
+        }
+      }
+    }
+    return true;
+  }
+
+  private canTetrominoRotate(): boolean {
+    return this.canTetrominoMove(0, 0, true)
   }
 
   private drawTetromino(): void {
@@ -141,58 +188,30 @@ class Tetris {
     this.CurrentTetromino = this.getRandomTetromino();
     this.drawTetromino()
   }
-
-  private canTetrominoMove(
-    rowIncrease: number,
-    colIncrease: number,
-    isRotated: boolean = false
-  ): boolean {
-    let currentShape = this.CurrentTetromino.shape;
-    if (isRotated) {
-      currentShape = this.getRotatedShape(this.CurrentTetromino.shape);
-    }
-    for (let r = 0; r < currentShape.length; r++) {
-      for (let c = 0; c < currentShape[0].length; c++) {
-        if (currentShape[r][c]) {
-          const row = this.CurrentTetromino.row + r + rowIncrease;
-          const col = this.CurrentTetromino.col + c + colIncrease;
-          if (
-            row >= this.boardHeight ||
-            row < 0 ||
-            col >= this.boardWidth ||
-            col < 0 ||
-            (row >= 0 &&
-              row < this.boardHeight &&
-              col >= 0 &&
-              col < this.boardWidth &&
-              this.board[row][col] !== "")
-          ) {
-            return false;
-          }
-        }
+  
+  private dropTetromino(): void {
+    while (true) {
+      if(!this.moveTetromino(1, 0)){
+        break
       }
     }
-    return true;
-  }
-
-  private canTetrominoRotate(): boolean {
-    return this.canTetrominoMove(0, 0, true)
   }
 
   private moveTetromino(
     rowIncrease: number,
     colIncrease: number,
-  ): void {
+  ): boolean {
     if (!this.canTetrominoMove(rowIncrease, colIncrease)) {
       if (rowIncrease > 0) {
         this.fixTetromino();
       }
-      return;
+      return false;
     }
     this.eraseTetromino();
     this.CurrentTetromino.row += rowIncrease;
     this.CurrentTetromino.col += colIncrease;
     this.drawTetromino();
+    return true;
   }
 
   private keyEventIstener(ev: KeyboardEvent): void {
@@ -203,6 +222,8 @@ class Tetris {
       this.moveTetromino(0, 1);
     } else if (key === "ArrowUp" || key === "w") {
       this.rotateTetromino();
+    } else if (key === " ") {
+      this.dropTetromino()
     } else {
       this.moveTetromino(1, 0);
     }
