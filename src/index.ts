@@ -10,6 +10,8 @@ interface Tetromino extends TetrominoTemplate {
 
 type Board = string[][];
 
+type Coords = [number, number];
+
 /** Class for game `Tetris` using `div` conatiner with `id  game-board`
  * to draw blocks and properly interact with user while playing.
  * P.S Doing this game i was inspired by one video from youtube  ^_^
@@ -41,7 +43,7 @@ class Tetris {
     this.gameKeyHandler = this.keyGameEventListener.bind(this);
     this.mainClickHandler = this.mainEventListener.bind(this);
     document.addEventListener("keydown", this.mainClickHandler);
-    this.toggleBgMusic()
+    this.toggleBgMusic();
   }
 
   /** Returns matrix using `boardHeight` attr like quantity of rows and `boardWidth`
@@ -130,11 +132,29 @@ class Tetris {
     };
   }
 
+  /** Returns current ghost coordinates using `canGhostTetrominoMove` to determine
+   * position for fixing
+   */
+  private getGhostTetrominoCoords(): Coords {
+    let row = this.CurrentTetromino.row;
+    const col = this.CurrentTetromino.col;
+    while (this.canGhostTetrominoMove(row, col)) {
+      row++;
+    }
+    console.log(row, col);
+    return [row, col];
+  }
+
   /** Draws HTML block within game board with given params */
-  private drawBlock(color: string, row: number, col: number): void {
+  private drawBlock(
+    color: string,
+    row: number,
+    col: number,
+    className: string = "block"
+  ): void {
     const block = document.createElement("div");
     block.id = `block-${row}-${col}`;
-    block.classList.add("block");
+    block.classList.add(className);
     block.style.top = this.blockSize * row + "px";
     block.style.left = this.blockSize * col + "px";
     block.style.backgroundColor = color;
@@ -185,6 +205,24 @@ class Tetris {
     return true;
   }
 
+  /** Determines if current ghost tetronimo can go down */
+  private canGhostTetrominoMove(row: number, col: number): boolean {
+    const shape = this.CurrentTetromino.shape;
+    for (let r = 0; r < this.CurrentTetromino.shape.length; r++) {
+      for (let c = 0; c < this.CurrentTetromino.shape[0].length; c++) {
+        if (shape[r][c]) {
+          if (
+            row + r + 1 >= this.boardHeight ||
+            this.board[row + r + 1][col + c] !== ""
+          ) {
+            return false;
+          }
+        }
+      }
+    }
+    return true;
+  }
+
   /** Returns boolean if tetromino can rotate using `canTetrominoRotate`
    * function
    */
@@ -202,7 +240,7 @@ class Tetris {
     return false;
   }
 
-  /** Draws current Tetromino on the game board using `drawBlock` function */
+  /** Draws current Tetromino on the game board */
   private drawTetromino(): void {
     const tetromino = this.CurrentTetromino;
     for (let r = 0; r < tetromino.shape.length; r++) {
@@ -214,7 +252,7 @@ class Tetris {
     }
   }
 
-  /** Erases current Tetromino from the game board using `eraseBlock` function */
+  /** Erases current Tetromino from the game board */
   private eraseTetromino(): void {
     const tetromino = this.CurrentTetromino;
     for (let r = 0; r < tetromino.shape.length; r++) {
@@ -229,13 +267,42 @@ class Tetris {
     }
   }
 
+  /** Draw current ghost Tetronimo from the game board*/
+  private drawGhostTetromino(): void {
+    const [row, col] = this.getGhostTetrominoCoords();
+    const color = this.CurrentTetromino.color;
+    const shape = this.CurrentTetromino.shape;
+    for (let r = 0; r < shape.length; r++) {
+      for (let c = 0; c < shape[0].length; c++) {
+        if (shape[r][c]) {
+          this.drawBlock(color, row + r, col + c, "ghost-block");
+        }
+      }
+    }
+  }
+
+  /** Erase current ghost Tetronimo from the game board*/
+  private eraseGhostTetromino(): void {
+    const [row, col] = this.getGhostTetrominoCoords();
+    const shape = this.CurrentTetromino.shape;
+    for (let r = 0; r < shape.length; r++) {
+      for (let c = 0; c < shape[0].length; c++) {
+        if (shape[r][c]) {
+          this.eraseBlock(`block-${row + r}-${col + c}`);
+        }
+      }
+    }
+  }
+
   /** Checks if current tetromino can be rotated, if it does, rotate it  */
   private rotateTetromino(): void {
     if (this.canTetrominoRotate()) {
+      this.eraseGhostTetromino();
       this.eraseTetromino();
       this.CurrentTetromino.shape = this.getRotatedShape(
         this.CurrentTetromino.shape
       );
+      this.drawGhostTetromino();
       this.drawTetromino();
     }
   }
@@ -262,6 +329,7 @@ class Tetris {
       return;
     }
     this.CurrentTetromino = this.getRandomTetromino();
+    this.drawGhostTetromino();
     this.drawTetromino();
   }
 
@@ -286,9 +354,11 @@ class Tetris {
       }
       return false;
     }
+    this.eraseGhostTetromino();
     this.eraseTetromino();
     this.CurrentTetromino.row += rowIncrease;
     this.CurrentTetromino.col += colIncrease;
+    this.drawGhostTetromino();
     this.drawTetromino();
     return true;
   }
@@ -313,11 +383,11 @@ class Tetris {
 
   /** Event listener which after mouse clicking envoke `run` function to start game */
   private mainEventListener(ev: KeyboardEvent): void {
-    const key = ev.key
+    const key = ev.key;
     if (key === "Enter") {
       this.run();
     } else if (key === "m") {
-      this.toggleBgMusic()
+      this.toggleBgMusic();
     }
   }
 
@@ -327,14 +397,14 @@ class Tetris {
     document.removeEventListener("keydown", this.gameKeyHandler);
     console.log("You are lose!");
   }
-  
+
   /** Toggle bg music */
   public toggleBgMusic(): void {
-    const music = document.querySelector("audio")!
-    if(music.paused) {
-      music.play()
+    const music = document.querySelector("audio")!;
+    if (music.paused) {
+      music.play();
     } else {
-      music.pause()
+      music.pause();
     }
   }
 
@@ -346,6 +416,7 @@ class Tetris {
     this.board = this.getEmptyBoard();
     this.redrawBoard();
     this.CurrentTetromino = this.getRandomTetromino();
+    this.drawGhostTetromino();
     this.drawTetromino();
     this.GameIntervalId = setInterval(
       this.moveTetromino.bind(this),
