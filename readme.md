@@ -7,7 +7,7 @@
 **rotate >> w | ArrowUp**    
 **move down >> s || ArrowDown**     
 **drop >> spacebar**    
-**mute music >> m**    
+**mute/enable music >> m**    
 **new game >> Enter**    
     
 P.S This game inspired by one video from youtube
