@@ -471,7 +471,7 @@ class Tetris {
     music.play();
   }
 
-  /** Stops game and current game interval function */
+  /** Stops game and current game interval function, add event listener to change current speed */
   private stopGame(): void {
     clearInterval(this.GameIntervalId);
     document.removeEventListener("keydown", this.gameKeyHandler);
