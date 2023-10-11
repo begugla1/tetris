@@ -382,7 +382,7 @@ class Tetris {
     }
   }
 
-  /** Event listener which after mouse clicking envoke `run` function to start game */
+  /** Event listener for running game, toggling and changing music */
   private mainEventListener(ev: KeyboardEvent): void {
     const key = ev.key;
     if (key === "Enter") {

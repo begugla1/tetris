@@ -313,7 +313,7 @@ class Tetris {
             this.dropTetromino();
         }
     }
-    /** Event listener which after mouse clicking envoke `run` function to start game */
+    /** Event listener for running game, toggling and changing music */
     mainEventListener(ev) {
         const key = ev.key;
         if (key === "Enter") {
