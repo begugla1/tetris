@@ -1,19 +1,25 @@
 "use strict";
 /** Class for game `Tetris` using `div` conatiner with `id  game-board`
  * to draw blocks and properly interact with user while playing.
- * P.S Doing this game i was inspired by one video from youtube  ^_^
+ * Using `downTime` attr const equals 1000 to with use of `currentSpeed` attr
+ * to determine current speed of falling of tetromino. **Improtant!!!**
+ * you must only edit currentSpeed to avoid different bugs and problems
  */
 class Tetris {
-    constructor(boardHeight, boardWidth, blockSize, downtime, tetrominoTemplates, musicAssets) {
+    constructor(boardHeight, boardWidth, blockSize, tetrominoTemplates, musicAssets) {
         this.boardHeight = boardHeight;
         this.boardWidth = boardWidth;
         this.blockSize = blockSize;
-        this.downTime = downtime;
         this.tetrominoTemplates = tetrominoTemplates;
         this.musicAssets = musicAssets;
-        this.gameKeyHandler = this.keyGameEventListener.bind(this);
-        this.mainClickHandler = this.mainEventListener.bind(this);
-        document.addEventListener("keydown", this.mainClickHandler);
+        this.downTime = 1000;
+        this.currentSpeed = 1;
+        this.currentScore = 0;
+        this.gameKeyHandler = this.gameEventListener.bind(this);
+        this.mainKeyHandler = this.mainEventListener.bind(this);
+        this.changeSpeedKeyHandler = this.changeSpeedEventListener.bind(this);
+        document.addEventListener("keydown", this.mainKeyHandler);
+        document.addEventListener("keydown", this.changeSpeedKeyHandler);
         this.toggleBgMusic();
     }
     /** Returns matrix using `boardHeight` attr like quantity of rows and `boardWidth`
@@ -40,6 +46,21 @@ class Tetris {
                 }
             }
         }
+    }
+    /** Redraws html `div` conatiner with speed and currentScore */
+    redrawInfoBoard(redrawScore, redrawSpeed) {
+        if (redrawScore) {
+            const score = document.getElementById("score");
+            score.innerHTML = `Score: ${this.currentScore}`;
+        }
+        if (redrawSpeed) {
+            const speed = document.getElementById("speed");
+            speed.innerHTML = `Speed: ${this.parseCurrentSpeed()}`;
+        }
+    }
+    /** Parse current speed to prettier value and returns it */
+    parseCurrentSpeed() {
+        return Math.round(this.currentSpeed * 10);
     }
     /** Erase full rows if exists, returns quantity of affected rows */
     clearRows() {
@@ -241,7 +262,7 @@ class Tetris {
     }
     /** Fix tetromino on current position in `board` attr. Then
      * clear full rows, if they does. Finally, replace current tetromino on new one
-     * and draw it
+     * and draw it, update current score and redraws info-board el with scores
      */
     fixTetromino() {
         const tetromino = this.CurrentTetromino;
@@ -255,7 +276,8 @@ class Tetris {
             }
         }
         const rows = this.clearRows();
-        console.log(rows); // TODO do something kinda off scores...?
+        this.currentScore += Math.round(rows * this.currentSpeed * 10);
+        this.redrawInfoBoard(true);
         if (this.losingTetrominoIsSet()) {
             this.stopGame();
             return;
@@ -295,7 +317,7 @@ class Tetris {
     /**
      * Event listener for all game key events, like rotation, falling, etc.
      */
-    keyGameEventListener(ev) {
+    gameEventListener(ev) {
         const key = ev.key;
         if (key === "ArrowLeft" || key === "a") {
             this.moveTetromino(0, -1);
@@ -325,12 +347,23 @@ class Tetris {
         else if (key === "c") {
             this.changeBgMusic();
         }
+        else if (key === "Escape") {
+            this.stopGame();
+        }
     }
-    /** Stops game and current interval function */
-    stopGame() {
-        clearInterval(this.GameIntervalId);
-        document.removeEventListener("keydown", this.gameKeyHandler);
-        console.log("You are lose!");
+    /** Event listener for changing of current Speed of falling of tetromino
+     * **Important!!!** It's can be only be used while player doesn't play
+     */
+    changeSpeedEventListener(ev) {
+        const key = ev.key;
+        if (key === "o") {
+            this.currentSpeed -= 0.1;
+            this.redrawInfoBoard(false, true);
+        }
+        else if (key === "i") {
+            this.currentSpeed += 0.1;
+            this.redrawInfoBoard(false, true);
+        }
     }
     /** Toggle bg music */
     toggleBgMusic() {
@@ -344,7 +377,7 @@ class Tetris {
     }
     /** Changes backgound music on next one in list, using regex to determine
      * current audio file. If you want to change music path, change this expression.
-     * Important!!!!! - there should be start music for correct handling
+     * **Important!!!!!** - there must be start music with valid src in html for correct handling
      */
     changeBgMusic() {
         const regexp = /.+(?<=\/assets\/music\/)(.+)/;
@@ -360,17 +393,28 @@ class Tetris {
         }
         music.play();
     }
+    /** Stops game and current game interval function */
+    stopGame() {
+        clearInterval(this.GameIntervalId);
+        document.removeEventListener("keydown", this.gameKeyHandler);
+        document.addEventListener("keydown", this.changeSpeedKeyHandler);
+        console.log("You are lose!");
+    }
     /** Main function. Clear board, current interval functon if it exists, draw start tetromino,
-     * starts new one interval function and adds `keyGameEventListener` to interact with player
+     * starts new one interval function, adds `gameEventListener` to interact with player,
+     * clear iterval for changing of speed, set curre score to 0 and redraw info-board el
      */
     run() {
         clearInterval(this.GameIntervalId);
         this.board = this.getEmptyBoard();
         this.redrawBoard();
+        this.currentScore = 0;
+        this.redrawInfoBoard(true, false);
         this.CurrentTetromino = this.getRandomTetromino();
         this.drawGhostTetromino();
         this.drawTetromino();
-        this.GameIntervalId = setInterval(this.moveTetromino.bind(this), this.downTime, 1, 0);
+        this.GameIntervalId = setInterval(this.moveTetromino.bind(this), this.downTime / this.currentSpeed, 1, 0);
+        document.removeEventListener("keydown", this.changeSpeedKeyHandler);
         document.addEventListener("keydown", this.gameKeyHandler);
     }
 }
@@ -432,5 +476,5 @@ const musicAssets = [
 const BOARD_WIDTH = 10;
 const BOARD_HEIGHT = 20;
 const BLOCK_SIZE = 24;
-const game = new Tetris(BOARD_HEIGHT, BOARD_WIDTH, BLOCK_SIZE, 500, tetrominoTemplates, musicAssets);
+const game = new Tetris(BOARD_HEIGHT, BOARD_WIDTH, BLOCK_SIZE, tetrominoTemplates, musicAssets);
 game.run();

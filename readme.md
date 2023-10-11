@@ -10,5 +10,8 @@
 **mute/enable music >> m**  
 **change music >> c**       
 **new game >> Enter**    
+**break game and stop it >> Escape**   
+**dicrease current speed >> o**     
+**increase current speed >> i**     
     
 P.S This game inspired by one video from youtube
