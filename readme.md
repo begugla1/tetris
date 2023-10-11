@@ -13,5 +13,6 @@
 **break game and stop it >> Escape**   
 **dicrease current speed >> o**     
 **increase current speed >> i**     
+*You can change speed only when you are not playing*
     
 P.S This game inspired by one video from youtube
