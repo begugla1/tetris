@@ -4,12 +4,13 @@
  * P.S Doing this game i was inspired by one video from youtube  ^_^
  */
 class Tetris {
-    constructor(boardHeight, boardWidth, blockSize, downtime, tetrominoTemplates) {
+    constructor(boardHeight, boardWidth, blockSize, downtime, tetrominoTemplates, musicAssets) {
         this.boardHeight = boardHeight;
         this.boardWidth = boardWidth;
         this.blockSize = blockSize;
         this.downTime = downtime;
         this.tetrominoTemplates = tetrominoTemplates;
+        this.musicAssets = musicAssets;
         this.gameKeyHandler = this.keyGameEventListener.bind(this);
         this.mainClickHandler = this.mainEventListener.bind(this);
         document.addEventListener("keydown", this.mainClickHandler);
@@ -321,6 +322,9 @@ class Tetris {
         else if (key === "m") {
             this.toggleBgMusic();
         }
+        else if (key === "c") {
+            this.changeBgMusic();
+        }
     }
     /** Stops game and current interval function */
     stopGame() {
@@ -337,6 +341,24 @@ class Tetris {
         else {
             music.pause();
         }
+    }
+    /** Changes backgound music on next one in list, using regex to determine
+     * current audio file. If you want to change music path, change this expression.
+     * Important!!!!! - there should be start music for correct handling
+     */
+    changeBgMusic() {
+        const regexp = /.+(?<=\/assets\/music\/)(.+)/;
+        const music = document.querySelector("audio");
+        music.pause();
+        const regexpResult = regexp.exec(music.src);
+        const currentMusicIndex = this.musicAssets.indexOf(regexpResult[1]);
+        if (currentMusicIndex === this.musicAssets.length - 1) {
+            music.src = music.src.replace(regexpResult[1], this.musicAssets[0]);
+        }
+        else {
+            music.src = music.src.replace(regexpResult[1], this.musicAssets[currentMusicIndex + 1]);
+        }
+        music.play();
     }
     /** Main function. Clear board, current interval functon if it exists, draw start tetromino,
      * starts new one interval function and adds `keyGameEventListener` to interact with player
@@ -400,8 +422,15 @@ const tetrominoTemplates = [
         ],
     },
 ];
+const musicAssets = [
+    "miamiDisco.mp3",
+    "hotline.mp3",
+    "hydrogen.mp3",
+    "daisuke.mp3",
+    "crystals.mp3",
+];
 const BOARD_WIDTH = 10;
 const BOARD_HEIGHT = 20;
 const BLOCK_SIZE = 24;
-const game = new Tetris(BOARD_HEIGHT, BOARD_WIDTH, BLOCK_SIZE, 500, tetrominoTemplates);
+const game = new Tetris(BOARD_HEIGHT, BOARD_WIDTH, BLOCK_SIZE, 500, tetrominoTemplates, musicAssets);
 game.run();
