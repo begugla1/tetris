@@ -4,11 +4,13 @@
  * P.S Doing this game i was inspired by one video from youtube  ^_^
  */
 class Tetris {
-    constructor(boardHeight, boardWidth, blockSize, downtime, tetrominoTemplates) {
+    constructor(boardHeight, boardWidth, blockSize, tetrominoTemplates) {
+        this.currentScore = 0;
+        this.currentSpeed = 1000;
+        this.speedLevel = 0;
         this.boardHeight = boardHeight;
         this.boardWidth = boardWidth;
         this.blockSize = blockSize;
-        this.downTime = downtime;
         this.tetrominoTemplates = tetrominoTemplates;
         this.gameKeyHandler = this.keyGameEventListener.bind(this);
         this.mainClickHandler = this.mainEventListener.bind(this);
@@ -30,7 +32,7 @@ class Tetris {
         return board;
     }
     /** Redraws html `div` container with game */
-    redrawBoard() {
+    redrawGameBoard() {
         document.getElementById("game-board").innerHTML = "";
         for (let r = 0; r < this.boardHeight; r++) {
             for (let c = 0; c < this.boardWidth; c++) {
@@ -39,6 +41,13 @@ class Tetris {
                 }
             }
         }
+    }
+    /** Redraws info-board */
+    redrawInfoBoard() {
+        const score = document.getElementById("score");
+        score.innerHTML = `Score: ${this.currentScore}`;
+        const currentSpeed = document.getElementById("current-speed");
+        currentSpeed.innerHTML = `Speed: ${this.currentSpeed}`;
     }
     /** Erase full rows if exists, returns quantity of affected rows */
     clearRows() {
@@ -64,7 +73,7 @@ class Tetris {
                 r++;
             }
         }
-        this.redrawBoard();
+        this.redrawGameBoard();
         return clearRows;
     }
     /** Returns rotated shape of given shape, doing rotation to clockwise on 90 degrees */
@@ -91,6 +100,10 @@ class Tetris {
             col: Math.floor(Math.random() *
                 (this.boardWidth - tetrominoTemplate.shape[0].length + 1)),
         };
+    }
+    /** Changes current tetromino speed */
+    changeCurrentSpeed(value) {
+        this.currentSpeed -= value * this.speedLevel;
     }
     /** Returns current ghost coordinates using `canGhostTetrominoMove` to determine
      * position for fixing
@@ -254,7 +267,7 @@ class Tetris {
             }
         }
         const rows = this.clearRows();
-        console.log(rows); // TODO do something kinda off scores...?
+        this.currentScore = this.currentSpeed * rows;
         if (this.losingTetrominoIsSet()) {
             this.stopGame();
             return;
@@ -344,11 +357,12 @@ class Tetris {
     run() {
         clearInterval(this.GameIntervalId);
         this.board = this.getEmptyBoard();
-        this.redrawBoard();
+        this.redrawGameBoard();
         this.CurrentTetromino = this.getRandomTetromino();
         this.drawGhostTetromino();
         this.drawTetromino();
-        this.GameIntervalId = setInterval(this.moveTetromino.bind(this), this.downTime, 1, 0);
+        this.GameIntervalId = setInterval(this.moveTetromino.bind(this), this.currentSpeed, 1, 0);
+        this.GameSpeedIntervalId = setInterval(this.changeCurrentSpeed.bind(this), this.currentSpeed, 10);
         document.addEventListener("keydown", this.gameKeyHandler);
     }
 }
@@ -403,5 +417,5 @@ const tetrominoTemplates = [
 const BOARD_WIDTH = 10;
 const BOARD_HEIGHT = 20;
 const BLOCK_SIZE = 24;
-const game = new Tetris(BOARD_HEIGHT, BOARD_WIDTH, BLOCK_SIZE, 500, tetrominoTemplates);
+const game = new Tetris(BOARD_HEIGHT, BOARD_WIDTH, BLOCK_SIZE, tetrominoTemplates);
 game.run();
