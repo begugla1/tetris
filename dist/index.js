@@ -276,7 +276,7 @@ class Tetris {
             }
         }
         const rows = this.clearRows();
-        this.currentScore += Math.round(rows * this.currentSpeed * 10);
+        this.currentScore += Math.round(rows * this.currentSpeed ** 2);
         this.redrawInfoBoard(true);
         if (this.losingTetrominoIsSet()) {
             this.stopGame();
