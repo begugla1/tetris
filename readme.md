@@ -5,6 +5,7 @@
 **move left >> a | ArrowLeft**    
 **move right >> d | ArrowRight**    
 **rotate >> w | ArrowUp**    
+**move down >> s || ArrowDown**
 **drop >> spacebar**    
 **mute music >> m**    
 **new game >> Enter**    
