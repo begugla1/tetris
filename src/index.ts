@@ -52,9 +52,9 @@ class Tetris {
     this.currentScore = 0;
     this.gameKeyHandler = this.gameEventListener.bind(this);
     this.mainKeyHandler = this.mainEventListener.bind(this);
-    this.changeSpeedKeyHandler = this.changeSpeedEventListener.bind(this)
+    this.changeSpeedKeyHandler = this.changeSpeedEventListener.bind(this);
     document.addEventListener("keydown", this.mainKeyHandler);
-    document.addEventListener("keydown", this.changeSpeedKeyHandler)
+    document.addEventListener("keydown", this.changeSpeedKeyHandler);
     this.toggleBgMusic();
   }
 
@@ -87,13 +87,13 @@ class Tetris {
 
   /** Redraws html `div` conatiner with speed and currentScore */
   private redrawInfoBoard(redrawScore?: boolean, redrawSpeed?: boolean): void {
-    if(redrawScore){
-      const score = document.getElementById("score")!
-      score.innerHTML = `Score: ${this.currentScore}`
+    if (redrawScore) {
+      const score = document.getElementById("score")!;
+      score.innerHTML = `Score: ${this.currentScore}`;
     }
-    if(redrawSpeed) {
-      const speed = document.getElementById("speed")!
-      speed.innerHTML = `Speed: ${this.currentSpeed}`
+    if (redrawSpeed) {
+      const speed = document.getElementById("speed")!;
+      speed.innerHTML = `Speed: ${this.currentSpeed}`;
     }
   }
 
@@ -347,7 +347,7 @@ class Tetris {
     const rows = this.clearRows();
     this.currentScore += Math.round(rows * this.currentSpeed ** 2);
     this.redrawInfoBoard(true);
-    
+
     if (this.losingTetrominoIsSet()) {
       this.stopGame();
       return;
@@ -415,7 +415,7 @@ class Tetris {
     } else if (key === "c") {
       this.changeBgMusic();
     } else if (key === "Escape") {
-      this.stopGame()
+      this.stopGame();
     }
   }
 
@@ -423,15 +423,15 @@ class Tetris {
    * **Important!!!** It's can be only be used while player doesn't play
    */
   private changeSpeedEventListener(ev: KeyboardEvent): void {
-    const key = ev.key
-    if(key === "o"){
-      if(!(this.currentSpeed - 1 < 0)) {
-        this.currentSpeed-=1
-        this.redrawInfoBoard(false, true)
+    const key = ev.key;
+    if (key === "o") {
+      if (!(this.currentSpeed - 1 < 0)) {
+        this.currentSpeed -= 1;
+        this.redrawInfoBoard(false, true);
       }
-    } else if (key === "i"){
-      this.currentSpeed+=1
-      this.redrawInfoBoard(false, true)
+    } else if (key === "i") {
+      this.currentSpeed += 1;
+      this.redrawInfoBoard(false, true);
     }
   }
 
@@ -470,7 +470,7 @@ class Tetris {
   private stopGame(): void {
     clearInterval(this.GameIntervalId);
     document.removeEventListener("keydown", this.gameKeyHandler);
-    document.addEventListener("keydown", this.changeSpeedKeyHandler)
+    document.addEventListener("keydown", this.changeSpeedKeyHandler);
     console.log("You are lose!");
   }
 
@@ -482,8 +482,8 @@ class Tetris {
     clearInterval(this.GameIntervalId);
     this.board = this.getEmptyBoard();
     this.redrawBoard();
-    this.currentScore = 0
-    this.redrawInfoBoard(true, false)
+    this.currentScore = 0;
+    this.redrawInfoBoard(true, false);
     this.CurrentTetromino = this.getRandomTetromino();
     this.drawGhostTetromino();
     this.drawTetromino();
@@ -493,7 +493,7 @@ class Tetris {
       1,
       0
     );
-    document.removeEventListener("keydown", this.changeSpeedKeyHandler)
+    document.removeEventListener("keydown", this.changeSpeedKeyHandler);
     document.addEventListener("keydown", this.gameKeyHandler);
   }
 }
