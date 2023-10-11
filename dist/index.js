@@ -55,12 +55,8 @@ class Tetris {
         }
         if (redrawSpeed) {
             const speed = document.getElementById("speed");
-            speed.innerHTML = `Speed: ${this.parseCurrentSpeed()}`;
+            speed.innerHTML = `Speed: ${this.currentSpeed}`;
         }
-    }
-    /** Parse current speed to prettier value and returns it */
-    parseCurrentSpeed() {
-        return Math.round(this.currentSpeed * 10);
     }
     /** Erase full rows if exists, returns quantity of affected rows */
     clearRows() {
@@ -357,13 +353,13 @@ class Tetris {
     changeSpeedEventListener(ev) {
         const key = ev.key;
         if (key === "o") {
-            if (!(this.currentSpeed - 0.1 < 0)) {
-                this.currentSpeed -= 0.1;
+            if (!(this.currentSpeed - 1 < 0)) {
+                this.currentSpeed -= 1;
                 this.redrawInfoBoard(false, true);
             }
         }
         else if (key === "i") {
-            this.currentSpeed += 0.1;
+            this.currentSpeed += 1;
             this.redrawInfoBoard(false, true);
         }
     }
