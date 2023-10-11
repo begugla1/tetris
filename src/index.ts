@@ -20,26 +20,25 @@ class Tetris {
   boardHeight: number;
   boardWidth: number;
   blockSize: number;
+  downTime: number;
   tetrominoTemplates: TetrominoTemplate[];
   gameKeyHandler: (ev: KeyboardEvent) => void;
   mainClickHandler: (ev: KeyboardEvent) => void;
   board!: Board;
   CurrentTetromino!: Tetromino;
   GameIntervalId?: NodeJS.Timeout;
-  GameSpeedIntervalId?: NodeJS.Timeout;
-  currentScore: number = 0;
-  currentSpeed: number = 1000;
-  speedLevel: number = 0;
 
   constructor(
     boardHeight: number,
     boardWidth: number,
     blockSize: number,
-    tetrominoTemplates: TetrominoTemplate[],
+    downtime: number,
+    tetrominoTemplates: TetrominoTemplate[]
   ) {
     this.boardHeight = boardHeight;
     this.boardWidth = boardWidth;
     this.blockSize = blockSize;
+    this.downTime = downtime;
     this.tetrominoTemplates = tetrominoTemplates;
     this.gameKeyHandler = this.keyGameEventListener.bind(this);
     this.mainClickHandler = this.mainEventListener.bind(this);
@@ -63,7 +62,7 @@ class Tetris {
   }
 
   /** Redraws html `div` container with game */
-  private redrawGameBoard(): void {
+  private redrawBoard(): void {
     document.getElementById("game-board")!.innerHTML = "";
     for (let r = 0; r < this.boardHeight; r++) {
       for (let c = 0; c < this.boardWidth; c++) {
@@ -72,14 +71,6 @@ class Tetris {
         }
       }
     }
-  }
-
-  /** Redraws info-board */
-  private redrawInfoBoard(): void {
-    const score = document.getElementById("score")!
-    score.innerHTML = `Score: ${this.currentScore}`
-    const currentSpeed = document.getElementById("current-speed")!
-    currentSpeed.innerHTML = `Speed: ${this.currentSpeed}`
   }
 
   /** Erase full rows if exists, returns quantity of affected rows */
@@ -106,7 +97,7 @@ class Tetris {
         r++;
       }
     }
-    this.redrawGameBoard();
+    this.redrawBoard();
     return clearRows;
   }
 
@@ -139,11 +130,6 @@ class Tetris {
           (this.boardWidth - tetrominoTemplate.shape[0].length + 1)
       ),
     };
-  }
-
-  /** Changes current tetromino speed */
-  private changeCurrentSpeed(value: number): void {
-    this.currentSpeed -= value * this.speedLevel
   }
 
   /** Returns current ghost coordinates using `canGhostTetrominoMove` to determine
@@ -335,7 +321,7 @@ class Tetris {
       }
     }
     const rows = this.clearRows();
-    this.currentScore = this.currentSpeed * rows
+    console.log(rows); // TODO do something kinda off scores...?
     if (this.losingTetrominoIsSet()) {
       this.stopGame();
       return;
@@ -426,21 +412,16 @@ class Tetris {
   public run(): void {
     clearInterval(this.GameIntervalId);
     this.board = this.getEmptyBoard();
-    this.redrawGameBoard();
+    this.redrawBoard();
     this.CurrentTetromino = this.getRandomTetromino();
     this.drawGhostTetromino();
     this.drawTetromino();
     this.GameIntervalId = setInterval(
       this.moveTetromino.bind(this),
-      this.currentSpeed,
+      this.downTime,
       1,
       0
     );
-    this.GameSpeedIntervalId = setInterval(
-      this.changeCurrentSpeed.bind(this),
-      this.currentSpeed,
-      10
-    )
     document.addEventListener("keydown", this.gameKeyHandler);
   }
 }
@@ -502,6 +483,7 @@ const game = new Tetris(
   BOARD_HEIGHT,
   BOARD_WIDTH,
   BLOCK_SIZE,
+  500,
   tetrominoTemplates
 );
 

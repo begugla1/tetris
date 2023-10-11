@@ -1,8 +1,6 @@
 * {
   margin: 0;
   padding: 0;
-  font-family: "Public Pixel";
-  color: #F9F6EE;
 }
 
 #root {
@@ -18,15 +16,7 @@
 
 #logo img {
   max-height: 100px;
-}
-
-#info-board {
-  padding: 4px 0 11px 0;
-}
-
-#info-board * {
-  padding: 4px 0 4px 0;
-  margin-right: 130px;
+  padding-bottom: 11px;
 }
 
 #game-board {
