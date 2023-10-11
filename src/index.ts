@@ -347,7 +347,7 @@ class Tetris {
    */
   private moveTetromino(rowIncrease: number, colIncrease: number): boolean {
     if (!this.canTetrominoMove(rowIncrease, colIncrease)) {
-      if (rowIncrease > 0) {
+      if (rowIncrease === 1) {
         this.fixTetromino();
       }
       return false;
