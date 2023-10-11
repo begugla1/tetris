@@ -313,7 +313,7 @@ class Tetris {
             this.dropTetromino();
         }
     }
-    /** Event listener for running game, toggling and changing music */
+    /** Event listener for rerunning game, toggling and changing music */
     mainEventListener(ev) {
         const key = ev.key;
         if (key === "Enter") {

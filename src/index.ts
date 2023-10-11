@@ -382,7 +382,7 @@ class Tetris {
     }
   }
 
-  /** Event listener for running game, toggling and changing music */
+  /** Event listener for rerunning game, toggling and changing music */
   private mainEventListener(ev: KeyboardEvent): void {
     const key = ev.key;
     if (key === "Enter") {
