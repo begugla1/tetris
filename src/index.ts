@@ -42,7 +42,7 @@ class Tetris {
     this.blockSize = blockSize;
     this.downTime = downtime;
     this.tetrominoTemplates = tetrominoTemplates;
-    this.musicAssets = musicAssets
+    this.musicAssets = musicAssets;
     this.gameKeyHandler = this.keyGameEventListener.bind(this);
     this.mainClickHandler = this.mainEventListener.bind(this);
     document.addEventListener("keydown", this.mainClickHandler);
@@ -390,7 +390,7 @@ class Tetris {
     } else if (key === "m") {
       this.toggleBgMusic();
     } else if (key === "c") {
-      this.changeBgMusic()
+      this.changeBgMusic();
     }
   }
 
@@ -411,22 +411,25 @@ class Tetris {
     }
   }
 
-  /** Changes backgound music on next one in list, using regex to determine 
+  /** Changes backgound music on next one in list, using regex to determine
    * current audio file. If you want to change music path, change this expression.
    * Important!!!!! - there should be start music for correct handling
    */
   private changeBgMusic(): void {
-    const regexp = /.+(?<=\/assets\/music\/)(.+)/
-    const music = document.querySelector("audio")!
-    music.pause()
-    const regexpResult = regexp.exec(music.src)!
-    const currentMusicIndex = this.musicAssets.indexOf(regexpResult[1])
-    if(currentMusicIndex === this.musicAssets.length - 1) {
-        music.src = music.src.replace(regexpResult[1], this.musicAssets[0])
+    const regexp = /.+(?<=\/assets\/music\/)(.+)/;
+    const music = document.querySelector("audio")!;
+    music.pause();
+    const regexpResult = regexp.exec(music.src)!;
+    const currentMusicIndex = this.musicAssets.indexOf(regexpResult[1]);
+    if (currentMusicIndex === this.musicAssets.length - 1) {
+      music.src = music.src.replace(regexpResult[1], this.musicAssets[0]);
     } else {
-        music.src = music.src.replace(regexpResult[1], this.musicAssets[currentMusicIndex+1])
+      music.src = music.src.replace(
+        regexpResult[1],
+        this.musicAssets[currentMusicIndex + 1]
+      );
     }
-    music.play()
+    music.play();
   }
 
   /** Main function. Clear board, current interval functon if it exists, draw start tetromino,
@@ -504,7 +507,7 @@ const musicAssets: string[] = [
   "hydrogen.mp3",
   "daisuke.mp3",
   "crystals.mp3",
-]
+];
 
 const BOARD_WIDTH = 10;
 const BOARD_HEIGHT = 20;
