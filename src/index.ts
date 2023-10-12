@@ -294,10 +294,11 @@ class Tetris {
   private drawGhostTetromino(): void {
     const [row, col] = this.getGhostTetrominoCoords();
     const shape = this.CurrentTetromino.shape;
+    const color = this.CurrentTetromino.color;
     for (let r = 0; r < shape.length; r++) {
       for (let c = 0; c < shape[0].length; c++) {
         if (shape[r][c]) {
-          this.drawBlock("grey", row + r, col + c, "ghost-block");
+          this.drawBlock(color, row + r, col + c, "ghost-block");
         }
       }
     }
