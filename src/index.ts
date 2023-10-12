@@ -568,6 +568,7 @@ const tetrominoTemplates: TetrominoTemplate[] = [
 
 const musicAssets: string[] = [
   "miamiDisco.mp3",
+  "fadeToWhite.mp3",
   "hotline.mp3",
   "hydrogen.mp3",
   "daisuke.mp3",
