@@ -415,7 +415,7 @@ class Tetris {
     } else if (key === "c") {
       this.changeBgMusic();
     } else if (key === "Escape") {
-      this.stopGame();
+      this.dropGame()
     }
   }
 
@@ -472,6 +472,16 @@ class Tetris {
     document.removeEventListener("keydown", this.gameKeyHandler);
     document.addEventListener("keydown", this.changeSpeedKeyHandler);
     console.log("You are lose!");
+  }
+
+
+  /** Drops current game, clear current score and game board */
+  private dropGame(): void {
+    this.stopGame();
+    this.board = this.getEmptyBoard();
+    this.redrawBoard();
+    this.currentScore = 0;
+    this.redrawInfoBoard(true, false);
   }
 
   /** Main function. Clear board, current interval functon if it exists, draw start tetromino,

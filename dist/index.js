@@ -344,7 +344,7 @@ class Tetris {
             this.changeBgMusic();
         }
         else if (key === "Escape") {
-            this.stopGame();
+            this.dropGame();
         }
     }
     /** Event listener for changing of current Speed of falling of tetromino
@@ -397,6 +397,14 @@ class Tetris {
         document.removeEventListener("keydown", this.gameKeyHandler);
         document.addEventListener("keydown", this.changeSpeedKeyHandler);
         console.log("You are lose!");
+    }
+    /** Drops current game, clear current score and game board */
+    dropGame() {
+        this.stopGame();
+        this.board = this.getEmptyBoard();
+        this.redrawBoard();
+        this.currentScore = 0;
+        this.redrawInfoBoard(true, false);
     }
     /** Main function. Clear board, current interval functon if it exists, draw start tetromino,
      * starts new one interval function, adds `gameEventListener` to interact with player,
