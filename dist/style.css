@@ -59,7 +59,7 @@
 }
 
 .start-screen {
-  font: 1em;
+  font-size: 1em;
   animation: blink 2.5s linear infinite;
   text-align: center;
 }
