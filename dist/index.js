@@ -426,46 +426,46 @@ class Tetris {
 }
 const tetrominoTemplates = [
     {
-        color: "cyan",
+        color: "#fd00ff",
         shape: [[1, 1, 1, 1]],
     },
     {
-        color: "blue",
+        color: "#0051ff",
         shape: [
             [2, 0, 0],
             [2, 2, 2],
         ],
     },
     {
-        color: "orange",
+        color: "#E93CAC",
         shape: [
             [0, 0, 3],
             [3, 3, 3],
         ],
     },
     {
-        color: "yellow",
+        color: "#b000ff",
         shape: [
             [4, 4],
             [4, 4],
         ],
     },
     {
-        color: "green",
+        color: "#201547",
         shape: [
             [0, 5, 5],
             [5, 5, 0],
         ],
     },
     {
-        color: "purple",
+        color: "#ff0677",
         shape: [
             [0, 6, 0],
             [6, 6, 6],
         ],
     },
     {
-        color: "red",
+        color: "#091833",
         shape: [
             [7, 7, 0],
             [0, 7, 7],
