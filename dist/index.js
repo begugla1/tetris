@@ -486,7 +486,6 @@ const musicAssets = [
     "hotline.mp3",
     "hydrogen.mp3",
     "daisuke.mp3",
-    "crystals.mp3",
 ];
 const BOARD_WIDTH = 10;
 const BOARD_HEIGHT = 20;
