@@ -415,7 +415,7 @@ class Tetris {
     } else if (key === "c") {
       this.changeBgMusic();
     } else if (key === "Escape") {
-      this.dropGame()
+      this.dropGame();
     }
   }
 
@@ -473,7 +473,6 @@ class Tetris {
     document.addEventListener("keydown", this.changeSpeedKeyHandler);
     console.log("You are lose!");
   }
-
 
   /** Drops current game, clear current score and game board */
   private dropGame(): void {
