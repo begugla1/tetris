@@ -31,7 +31,6 @@ class Tetris {
   board!: Board;
   CurrentTetromino!: Tetromino;
   GameIntervalId?: NodeJS.Timeout;
-  DecreasingSpeedIntervalId?: NodeJS.Timeout;
   currentScore: number;
   currentSpeed: number;
 
@@ -495,7 +494,8 @@ class Tetris {
 
   /** Main function. Clear board, current interval functon if it exists, draw start tetromino,
    * starts new one interval function, adds `gameEventListener` to interact with player,
-   * clear iterval for changing of speed, set curre score to 0 and redraw info-board el
+   * clear iterval for changing of speed, set current score to 0, redraw info-board el
+   * and creates new interval with current speed
    */
   public run(): void {
     clearInterval(this.GameIntervalId);
