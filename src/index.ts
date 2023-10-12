@@ -56,6 +56,7 @@ class Tetris {
     document.addEventListener("keydown", this.mainKeyHandler);
     document.addEventListener("keydown", this.changeSpeedKeyHandler);
     this.toggleBgMusic();
+    this.drawStartScreen()
   }
 
   /** Returns matrix using `boardHeight` attr like quantity of rows and `boardWidth`
@@ -575,14 +576,12 @@ const musicAssets: string[] = [
 
 const BOARD_WIDTH = 10;
 const BOARD_HEIGHT = 20;
-const BLOCK_SIZE = 24;
+const BLOCK_SIZE = 26;
 
-const game = new Tetris(
+new Tetris(
   BOARD_HEIGHT,
   BOARD_WIDTH,
   BLOCK_SIZE,
   tetrominoTemplates,
   musicAssets
 );
-
-game.run();
