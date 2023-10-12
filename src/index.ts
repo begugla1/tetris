@@ -481,7 +481,6 @@ class Tetris {
     clearInterval(this.GameIntervalId);
     document.removeEventListener("keydown", this.gameKeyHandler);
     document.addEventListener("keydown", this.changeSpeedKeyHandler);
-    console.log("You are lose!");
   }
 
   /** Drops current game, clear current score and game board */
