@@ -42,6 +42,9 @@
 }
 
 #game-board {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
   width: 240px;
   height: 480px;
@@ -58,6 +61,18 @@
 #info-board * {
   margin: 7px 0 7px 0;
 }
+
+.start-screen {
+  font-size: 0.8em;
+  animation: blink 2.5s linear infinite;
+  text-align: center;
+}
+@keyframes blink {
+  0% {opacity: 1;}
+  50% {opacity: 0;}
+  100% { opacity: 1; }
+}
+
 
 .block, .ghost-block {
   width: 24px;

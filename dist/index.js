@@ -121,6 +121,13 @@ class Tetris {
         }
         return [row, col];
     }
+    /** Draws start screen */
+    drawStartScreen() {
+        const startScreen = document.createElement("div");
+        startScreen.classList.add("neon", "start-screen");
+        startScreen.innerText = "<Enter> to play";
+        document.getElementById("game-board").appendChild(startScreen);
+    }
     /** Draws HTML block within game board with given params */
     drawBlock(color, row, col, className = "block") {
         var _a;
@@ -406,6 +413,7 @@ class Tetris {
         this.redrawBoard();
         this.currentScore = 0;
         this.redrawInfoBoard(true, false);
+        this.drawStartScreen();
     }
     /** Main function. Clear board, current interval functon if it exists, draw start tetromino,
      * starts new one interval function, adds `gameEventListener` to interact with player,
