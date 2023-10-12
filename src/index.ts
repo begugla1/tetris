@@ -55,7 +55,7 @@ class Tetris {
     document.addEventListener("keydown", this.mainKeyHandler);
     document.addEventListener("keydown", this.changeSpeedKeyHandler);
     this.toggleBgMusic();
-    this.drawStartScreen()
+    this.drawStartScreen();
   }
 
   /** Returns matrix using `boardHeight` attr like quantity of rows and `boardWidth`
@@ -170,10 +170,10 @@ class Tetris {
 
   /** Draws start screen */
   private drawStartScreen(): void {
-    const startScreen = document.createElement("div")
-    startScreen.classList.add("neon", "start-screen")
-    startScreen.innerText = "<Enter> to play"
-    document.getElementById("game-board")!.appendChild(startScreen)
+    const startScreen = document.createElement("div");
+    startScreen.classList.add("neon", "start-screen");
+    startScreen.innerText = "<Enter> to play";
+    document.getElementById("game-board")!.appendChild(startScreen);
   }
 
   /** Draws HTML block within game board with given params */
@@ -489,7 +489,7 @@ class Tetris {
     this.redrawBoard();
     this.currentScore = 0;
     this.redrawInfoBoard(true, false);
-    this.drawStartScreen()
+    this.drawStartScreen();
   }
 
   /** Main function. Clear board, current interval functon if it exists, draw start tetromino,
