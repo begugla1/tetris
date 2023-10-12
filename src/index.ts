@@ -34,6 +34,15 @@ class Tetris {
   currentScore: number;
   currentSpeed: number;
 
+  /** Initialize `Tetris` object: `currentSpeed`, `currentScore`, all consts
+   * and bound functions for event listeners. 
+   * *Other needed attrs will be set right on time with first game and will be
+   * updated after every game process.* 
+   * Then setting all handlers for interacting with user, add main event listener
+   * and change speed listener, enable music and finnaly draws start screen.
+   * This logic need to be here because it's initializing logic which doesn't 
+   * belongs to main game process.
+   */
   constructor(
     boardHeight: number,
     boardWidth: number,
@@ -492,9 +501,9 @@ class Tetris {
     this.drawStartScreen();
   }
 
-  /** Main function. Clear board, current interval functon if it exists, draw start tetromino,
+  /** Main function. Clear board, current interval function if it exists, draw start tetromino,
    * starts new one interval function, adds `gameEventListener` to interact with player,
-   * clear iterval for changing of speed, set current score to 0, redraw info-board el
+   * clear interval for changing of speed, set current score to 0, redraw info-board el
    * and creates new interval with current speed
    */
   public run(): void {
