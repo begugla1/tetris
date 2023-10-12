@@ -24,17 +24,13 @@
 }
 @keyframes neonAnim {
   from {
-      text-shadow:
-        0 0 10px rgba(229, 229, 7, .7),
-        0 0 40px rgba(229, 229, 7, .7),
-        0 0 100px rgba(229, 229, 7, .7);
-    }
-    to {
-      text-shadow:
-        0 0 5px rgba(229, 229, 7, .7),
-        0 0 20px rgba(229, 229, 7, .7),
-        0 0 60px rgba(229, 229, 7, .7);
-    }
+    text-shadow: 0 0 10px rgba(229, 229, 7, 0.7),
+      0 0 40px rgba(229, 229, 7, 0.7), 0 0 100px rgba(229, 229, 7, 0.7);
+  }
+  to {
+    text-shadow: 0 0 5px rgba(229, 229, 7, 0.7), 0 0 20px rgba(229, 229, 7, 0.7),
+      0 0 60px rgba(229, 229, 7, 0.7);
+  }
 }
 
 #logo img {
@@ -68,13 +64,19 @@
   text-align: center;
 }
 @keyframes blink {
-  0% {opacity: 1;}
-  50% {opacity: 0;}
-  100% { opacity: 1; }
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
-
-.block, .ghost-block {
+.block,
+.ghost-block {
   width: 24px;
   height: 24px;
   position: absolute;
@@ -84,5 +86,5 @@
 }
 
 .ghost-block {
-  filter: brightness(47%)
+  filter: brightness(47%);
 }
