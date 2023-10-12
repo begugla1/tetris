@@ -1,4 +1,4 @@
-# My own version of tetris!    
+# Cyber-Tetris    
 ## *Wanna play?.. run dist/index.html file and enjoy!*    
      
 ### Key bindings:
