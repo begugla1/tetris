@@ -142,21 +142,21 @@ class Tetris {
     }
     /** Draws HTML block within game board with given params */
     drawBlock(color, row, col, className = "block") {
-        var _a;
         const block = document.createElement("div");
         block.id = `block-${row}-${col}`;
         block.classList.add(className);
         block.style.top = this.blockSize * row + "px";
         block.style.left = this.blockSize * col + "px";
         block.style.backgroundColor = color;
-        (_a = document.getElementById("game-board")) === null || _a === void 0 ? void 0 : _a.appendChild(block);
+        document.getElementById("game-board").appendChild(block);
     }
     /** Erases block with given id */
     eraseBlock(blockId) {
-        var _a;
         const block = document.getElementById(blockId);
-        if (block)
-            (_a = document.getElementById("game-board")) === null || _a === void 0 ? void 0 : _a.removeChild(block);
+        if (block) {
+            document.getElementById("game-board").removeChild(block);
+        }
+        ;
     }
     /** Returns boolean if tetromino can move with given increases,
      * if `isRotated` is true, then shape of tetromino for calculatings

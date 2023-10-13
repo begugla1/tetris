@@ -201,13 +201,15 @@ class Tetris {
     block.style.left = this.blockSize * col + "px";
     block.style.backgroundColor = color;
 
-    document.getElementById("game-board")?.appendChild(block);
+    document.getElementById("game-board")!.appendChild(block);
   }
 
   /** Erases block with given id */
   private eraseBlock(blockId: string): void {
     const block = document.getElementById(blockId);
-    if (block) document.getElementById("game-board")?.removeChild(block);
+    if (block) {
+      document.getElementById("game-board")!.removeChild(block)
+    };
   }
 
   /** Returns boolean if tetromino can move with given increases,
