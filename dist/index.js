@@ -59,7 +59,7 @@ class Tetris {
     }
     /** Redraws html `div` conatiner with speed and currentScore according
      * to given params
-    */
+     */
     redrawInfoBoard(redrawScore, redrawSpeed) {
         if (redrawScore) {
             const score = document.getElementById("score");
@@ -304,7 +304,7 @@ class Tetris {
     }
     /** Drop current tetromino using `col` param of it to determine current
      * column in board
-    */
+     */
     dropTetromino() {
         while (true) {
             if (!this.moveTetromino(1, 0)) {

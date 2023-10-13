@@ -35,12 +35,12 @@ class Tetris {
   currentSpeed: number;
 
   /** Initialize `Tetris` object: `currentSpeed`, `currentScore`, all consts
-   * and bound functions for event listeners. 
+   * and bound functions for event listeners.
    * *Other needed attrs will be set right on time with first game and will be
-   * updated after every game process.* 
+   * updated after every game process.*
    * Then setting all handlers for interacting with user, add main event listener
    * and change speed listener, enable music and finnaly draws start screen.
-   * This logic need to be here because it's initializing logic which doesn't 
+   * This logic need to be here because it's initializing logic which doesn't
    * belongs to main game process.
    */
   constructor(
@@ -96,7 +96,7 @@ class Tetris {
 
   /** Redraws html `div` conatiner with speed and currentScore according
    * to given params
-  */
+   */
   private redrawInfoBoard(redrawScore?: boolean, redrawSpeed?: boolean): void {
     if (redrawScore) {
       const score = document.getElementById("score")!;
@@ -379,7 +379,7 @@ class Tetris {
 
   /** Drop current tetromino using `col` param of it to determine current
    * column in board
-  */
+   */
   private dropTetromino(): void {
     while (true) {
       if (!this.moveTetromino(1, 0)) {
