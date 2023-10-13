@@ -1,5 +1,3 @@
-import path from "path";
-
 interface TetrominoTemplate {
   color: string;
   shape: number[][];
