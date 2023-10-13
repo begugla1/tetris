@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 /** Class for game `Tetris` using `div` conatiner with `id  game-board`
  * to draw blocks and properly interact with user while playing.
  * Using `downTime` attr const equals 1000 to with use of `currentSpeed` attr
@@ -15,12 +16,12 @@ class Tetris {
      * This logic need to be here because it's initializing logic which doesn't
      * belongs to main game process.
      */
-    constructor(boardHeight, boardWidth, blockSize, tetrominoTemplates, musicAssets) {
+    constructor(boardHeight, boardWidth, blockSize, tetrominoTemplates, musicAssetsNames) {
         this.boardHeight = boardHeight;
         this.boardWidth = boardWidth;
         this.blockSize = blockSize;
         this.tetrominoTemplates = tetrominoTemplates;
-        this.musicAssets = musicAssets;
+        this.musicAssetsNames = musicAssetsNames;
         this.downTime = 1000;
         this.currentSpeed = 1;
         this.currentScore = 0;
@@ -404,12 +405,12 @@ class Tetris {
         const music = document.querySelector("audio");
         music.pause();
         const regexpResult = regexp.exec(music.src);
-        const currentMusicIndex = this.musicAssets.indexOf(regexpResult[1]);
-        if (currentMusicIndex === this.musicAssets.length - 1) {
-            music.src = music.src.replace(regexpResult[1], this.musicAssets[0]);
+        const currentMusicIndex = this.musicAssetsNames.indexOf(regexpResult[1]);
+        if (currentMusicIndex === this.musicAssetsNames.length - 1) {
+            music.src = music.src.replace(regexpResult[1], this.musicAssetsNames[0]);
         }
         else {
-            music.src = music.src.replace(regexpResult[1], this.musicAssets[currentMusicIndex + 1]);
+            music.src = music.src.replace(regexpResult[1], this.musicAssetsNames[currentMusicIndex + 1]);
         }
         music.play();
     }
@@ -495,7 +496,7 @@ const tetrominoTemplates = [
         ],
     },
 ];
-const musicAssets = [
+const musicAssetsNames = [
     "miamiDisco.mp3",
     "fadeToWhite.mp3",
     "hotline.mp3",
@@ -505,4 +506,4 @@ const musicAssets = [
 const BOARD_WIDTH = 10;
 const BOARD_HEIGHT = 20;
 const BLOCK_SIZE = 26;
-new Tetris(BOARD_HEIGHT, BOARD_WIDTH, BLOCK_SIZE, tetrominoTemplates, musicAssets);
+new Tetris(BOARD_HEIGHT, BOARD_WIDTH, BLOCK_SIZE, tetrominoTemplates, musicAssetsNames);

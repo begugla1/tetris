@@ -1,3 +1,5 @@
+import path from "path";
+
 interface TetrominoTemplate {
   color: string;
   shape: number[][];
@@ -24,7 +26,7 @@ class Tetris {
   readonly blockSize: number;
   readonly downTime: number;
   readonly tetrominoTemplates: TetrominoTemplate[];
-  readonly musicAssets: string[];
+  readonly musicAssetsNames: string[];
   readonly gameKeyHandler: (ev: KeyboardEvent) => void;
   readonly mainKeyHandler: (ev: KeyboardEvent) => void;
   readonly changeSpeedKeyHandler: (ev: KeyboardEvent) => void;
@@ -48,13 +50,13 @@ class Tetris {
     boardWidth: number,
     blockSize: number,
     tetrominoTemplates: TetrominoTemplate[],
-    musicAssets: string[]
+    musicAssetsNames: string[]
   ) {
     this.boardHeight = boardHeight;
     this.boardWidth = boardWidth;
     this.blockSize = blockSize;
     this.tetrominoTemplates = tetrominoTemplates;
-    this.musicAssets = musicAssets;
+    this.musicAssetsNames = musicAssetsNames;
     this.downTime = 1000;
     this.currentSpeed = 1;
     this.currentScore = 0;
@@ -476,13 +478,13 @@ class Tetris {
     const music = document.querySelector("audio")!;
     music.pause();
     const regexpResult = regexp.exec(music.src)!;
-    const currentMusicIndex = this.musicAssets.indexOf(regexpResult[1]);
-    if (currentMusicIndex === this.musicAssets.length - 1) {
-      music.src = music.src.replace(regexpResult[1], this.musicAssets[0]);
+    const currentMusicIndex = this.musicAssetsNames.indexOf(regexpResult[1]);
+    if (currentMusicIndex === this.musicAssetsNames.length - 1) {
+      music.src = music.src.replace(regexpResult[1], this.musicAssetsNames[0]);
     } else {
       music.src = music.src.replace(
         regexpResult[1],
-        this.musicAssets[currentMusicIndex + 1]
+        this.musicAssetsNames[currentMusicIndex + 1]
       );
     }
     music.play();
@@ -579,7 +581,7 @@ const tetrominoTemplates: TetrominoTemplate[] = [
   },
 ];
 
-const musicAssets: string[] = [
+const musicAssetsNames: string[] = [
   "miamiDisco.mp3",
   "fadeToWhite.mp3",
   "hotline.mp3",
@@ -596,5 +598,5 @@ new Tetris(
   BOARD_WIDTH,
   BLOCK_SIZE,
   tetrominoTemplates,
-  musicAssets
+  musicAssetsNames
 );
