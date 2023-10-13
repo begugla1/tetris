@@ -1,5 +1,4 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 /** Class for game `Tetris` using `div` conatiner with `id  game-board`
  * to draw blocks and properly interact with user while playing.
  * Using `downTime` attr const equals 1000 to with use of `currentSpeed` attr
