@@ -447,7 +447,7 @@ class Tetris {
   private changeSpeedEventListener(ev: KeyboardEvent): void {
     const key = ev.key;
     if (key === "o") {
-      if (!(this.currentSpeed - 1 < 1)) {
+      if (this.currentSpeed - 1 >= 1) {
         this.currentSpeed -= 1;
         this.redrawInfoBoard(false, true);
       }
