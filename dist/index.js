@@ -22,11 +22,11 @@ class Tetris {
         this.tetrominoTemplates = tetrominoTemplates;
         this.musicAssetsNames = musicAssetsNames;
         this.downTime = 1000;
-        this.currentSpeed = 1;
-        this.currentScore = 0;
         this.gameKeyHandler = this.gameEventListener.bind(this);
         this.mainKeyHandler = this.mainEventListener.bind(this);
         this.changeSpeedKeyHandler = this.changeSpeedEventListener.bind(this);
+        this.currentSpeed = 1;
+        this.currentScore = 0;
         document.addEventListener("keydown", this.mainKeyHandler);
         document.addEventListener("keydown", this.changeSpeedKeyHandler);
         this.toggleBgMusic();
