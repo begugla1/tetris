@@ -512,7 +512,7 @@ class Tetris {
    * clear interval for changing of speed, set current score to 0, redraw info-board el
    * and creates new interval with current speed
    */
-  public run(): void {
+  private run(): void {
     clearInterval(this.GameIntervalId);
     this.board = this.getEmptyBoard();
     this.redrawBoard();
