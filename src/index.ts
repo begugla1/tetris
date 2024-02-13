@@ -208,8 +208,8 @@ class Tetris {
   private eraseBlock(blockId: string): void {
     const block = document.getElementById(blockId);
     if (block) {
-      document.getElementById("game-board")!.removeChild(block)
-    };
+      document.getElementById("game-board")!.removeChild(block);
+    }
   }
 
   /** Returns boolean if tetromino can move with given increases,
