@@ -97,7 +97,7 @@ class Tetris {
         this.redrawBoard();
         return clearRows;
     }
-    /** Returns rotated shape of given shape, doing rotation to clockwise on 90 degrees */
+    /** Returns rotated shape of a given one, doing rotation to clockwise on 90 degrees */
     getRotatedShape(shape) {
         const rotatedShape = [];
         for (let i = 0; i < shape[0].length; i++) {
